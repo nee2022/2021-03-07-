@@ -230,7 +230,8 @@ export default {
         pay: "",
         type: "",
         duration: "",
-        source: "qr"
+        source: "qr",
+        service: 10
       }, //添加设备添加数据
       addFormRules: {
         // name: [{
@@ -302,7 +303,7 @@ export default {
             toKen +
             "&page=" +
             this.pagenum +
-            "&row=14&source=qr&keyword=" +
+            "&row=14&source=qr&service=10&keyword=" +
             this.input2
         )
         .then(res => {

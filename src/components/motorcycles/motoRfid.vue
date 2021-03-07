@@ -2,7 +2,7 @@
   <div class="oneCard-right">
     <div class="UserAssets-right-top">
       <div class="user-left">
-        <span class="user-word">刷卡套餐</span>
+        <span class="user-word">扫码套餐</span>
       </div>
       <div class="users-right">
         <myhead></myhead>
@@ -36,8 +36,11 @@
       <template>
         <el-table :data="menuList" stripe style="width: 95%">
           <el-table-column prop="id" label="套餐ID"> </el-table-column>
-          <el-table-column prop="pay" label="金额"> </el-table-column>
-          <el-table-column prop="duration" label="充电时长"> </el-table-column>
+          <el-table-column prop="name" label="名称"> </el-table-column>
+          <el-table-column prop="pay" label="价格"> </el-table-column>i'x
+          <el-table-column prop="duration" label="时长"> </el-table-column>
+          <el-table-column prop="type" label="类型" :formatter="formatterType">
+          </el-table-column>
           <el-table-column prop="address" label="操作" width="200">
             <template slot-scope="scope">
               <div class="operation">
@@ -75,7 +78,7 @@
     </div>
     <!-- 添加设备 -->
     <el-dialog
-      title="添加设备"
+      title="添加套餐"
       :visible.sync="addDialogVisible"
       width="30%"
       @close="addDialogClosed"
@@ -86,19 +89,25 @@
         ref="addFormRef"
         label-width="80px"
       >
-        <!-- <el-form-item label="套餐标题" prop="name">
-					<el-input v-model="addForm.name" class="addinput"></el-input>
-				</el-form-item> -->
-        <el-form-item label="套餐价格" prop="pay">
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="addForm.name" class="addinput"></el-input>
+        </el-form-item>
+        <el-form-item label="价格" prop="pay">
           <el-input v-model="addForm.pay" class="addinput"></el-input>
         </el-form-item>
-        <el-form-item label="充电时长" prop="duration">
+        <el-form-item label="时长" prop="duration">
           <el-input v-model="addForm.duration" class="addinput"></el-input>
+        </el-form-item>
+        <el-form-item label="类型:">
+          <el-select v-model="addForm.type" placeholder="请选择">
+            <el-option label="电能" value="2" disabled></el-option>
+            <el-option label="时间" value="3"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="addDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="chargersUser">确 定</el-button>
+        <el-button type="primary" @click="chargersUser">确定</el-button>
       </span>
     </el-dialog>
     <!-- 修改设备 -->
@@ -109,19 +118,25 @@
       @close="editDialogClosed"
     >
       <el-form :model="editForm" ref="editFormRef" label-width="80px">
-        <!-- <el-form-item label="套餐标题" prop="name">
-			 	<el-input v-model="editForm.name" class="addinput"></el-input>
-			 </el-form-item> -->
-        <el-form-item label="套餐价格" prop="pay">
-          <el-input v-model="editForm.pay" class="addinput"></el-input>
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="addForm.name" class="addinput"></el-input>
         </el-form-item>
-        <el-form-item label="充电时长" prop="duration">
-          <el-input v-model="editForm.duration" class="addinput"></el-input>
+        <el-form-item label="价格" prop="pay">
+          <el-input v-model="addForm.pay" class="addinput"></el-input>
+        </el-form-item>
+        <el-form-item label="时长" prop="duration">
+          <el-input v-model="addForm.duration" class="addinput"></el-input>
+        </el-form-item>
+        <el-form-item label="类型:">
+          <el-select v-model="addForm.type" placeholder="请选择">
+            <el-option label="电能" value="2" disabled></el-option>
+            <el-option label="时间" value="3"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="editDialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="editChargerInfo">确 定</el-button>
+        <el-button type="primary" @click="editChargerInfo">确定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -144,6 +159,10 @@ export default {
       dialogVisible: false,
       addDialogVisible: false,
       editDialogVisible: false, //控制修改设备对话框显示隐藏
+      tcName: "",
+      tcPay: "",
+      tcDuration: "",
+      tcType: "",
       add: false,
       selected: 0, //下拉框
       pagenum: 1, //分页
@@ -207,8 +226,10 @@ export default {
       // },
       addForm: {
         token: localStorage.getItem("token").replace(/\"/g, ""),
-        // name: '',
+        name: "",
         pay: "",
+        type: "",
+        service: 10,
         duration: "",
         source: "rfid"
       }, //添加设备添加数据
@@ -257,35 +278,38 @@ export default {
     this.getUserMes();
   },
   methods: {
-    handleOpen(key, keyPath) {
-      console.log(key, keyPath);
-      console.log(this.option);
+    formatterType: function(row, column, cellValue) {
+      var ret = ""; //你想在页面展示的值
+      if (cellValue === 1) {
+        ret = "金额"; //根据自己的需求设定
+      } else if (cellValue === 2) {
+        ret = "电能";
+      } else if (cellValue === 3) {
+        ret = "时间";
+      } else {
+        ret = "未知";
+      }
+      return ret;
     },
-    handleClose(key, keyPath) {
-      console.log(key, keyPath);
-    },
+    handleOpen(key, keyPath) {},
+    handleClose(key, keyPath) {},
     //获取用户卡信息列表
     getUserMes() {
       //token去掉引号
       let toKen = this.token.replace(/\"/g, "");
-      // console.log(toKen)
       this.$axios
         .get(
           "/admin/api/packages/?token=" +
             toKen +
             "&page=" +
             this.pagenum +
-            "&row=14&source=rfid&keyword=" +
+            "&row=14&source=rfid&service=10&keyword=" +
             this.input2
         )
         .then(res => {
-          console.log(res.data);
-          console.log(res.data.menuList);
-          // console.log(res.status)//打印状态码
           if (res.status == 200) {
             this.menuList = res.data.packages; //用户列表数据
             this.total = res.data.total;
-            console.log(this.menuList);
           }
         });
     },
@@ -302,8 +326,6 @@ export default {
             }
             this.$message.success("添加成功!");
             this.addDialogVisible = false;
-            console.log(this.addForm);
-            console.log(res);
             //刷新用户列表
             setTimeout(() => {
               this.getUserMes();
@@ -315,7 +337,6 @@ export default {
     },
     async removeUserByID(id) {
       let toKen = this.token.replace(/\"/g, "");
-      console.log(id);
       const confirmRes = await this.$confirm(
         "此操作将永久删除该套餐, 是否继续?",
         "提示",
@@ -325,14 +346,12 @@ export default {
           type: "warning"
         }
       ).catch(err => err);
-      // console.log(confirmRes)
       if (confirmRes !== "confirm") {
         return this.$message.info("已取消删除");
       }
       this.$axios
         .delete("/admin/api/package/" + id + "?token=" + toKen) //,{"token:toKen"}
         .then(res => {
-          console.log(res);
           if (res.status == 200) {
             this.$message.success("删除套餐成功");
             this.getUserMes(); //刷新用户数据
@@ -347,14 +366,11 @@ export default {
       this.editDialogVisible = true;
       //token去掉引号
       let toKen = this.token.replace(/\"/g, "");
-      // console.log(toKen)
       this.$axios
         .get("/admin/api/package/" + id + "?token=" + toKen) //根据id点击修改的id查询设备信息
         .then(res => {
-          //console.log(res.status)
           if (res.status == 200) {
             this.editForm = res.data.package;
-            console.log(res.data.package);
           }
         });
     },
@@ -362,24 +378,26 @@ export default {
     //提交修改后的设备信息
     editChargerInfo() {
       let toKen = this.token.replace(/\"/g, "");
+      var a = {
+        token: toKen,
+        pay: this.editForm.pay,
+        duration: this.editForm.duration
+      };
+      console.log("对象");
+      console.log(a);
       this.$refs.editFormRef.validate(valid => {
         if (!valid) {
           return this.$message.error("请输入正确的信息");
         } else {
           if (confirm("确认修改吗?")) {
             this.$axios
-              .put("admin/api/package/" + this.editForm.id, {
-                token: toKen,
-                pay: this.editForm.pay,
-                duration: this.editForm.duration
-              })
+              .put("admin/api/package/" + this.editForm.id, this.addForm)
               .then(res => {
                 if (res.status !== 200) {
                   return this.$message.error("修改失败!");
                 }
                 this.$message.success("修改成功!");
                 this.addDialogVisible = false;
-                console.log(this.editForm);
                 //刷新设备列表
                 setTimeout(() => {
                   this.getUserMes();
@@ -396,7 +414,6 @@ export default {
 
     //监听页码值改变
     handleCurrentChange(newPage) {
-      //console.log(newPage)
       this.pagenum = newPage;
       this.getUserMes();
     },
