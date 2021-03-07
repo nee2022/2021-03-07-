@@ -14,12 +14,12 @@
             <el-input v-model="b" class="addinput"></el-input>
           </el-form-item>
 
-          <el-form-item label="金额:">
+          <!-- <el-form-item label="金额:">
             <el-input v-model="amountC" class="addinput"></el-input>
           </el-form-item>
           <el-form-item label="电量:">
             <el-input v-model="energyC" class="addinput"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="时长:">
             <el-input v-model="c" class="addinput"></el-input>
           </el-form-item>
@@ -84,7 +84,7 @@
               >查询</el-button
             >
           </div>
-          <div class="zhandian">
+          <!-- <div class="zhandian">
             <el-button
               style="width: 100px"
               type="primary"
@@ -92,7 +92,7 @@
               class="but but2"
               >重置</el-button
             >
-          </div>
+          </div> -->
           <div class="zhandian">
             <el-button
               style="width: 100px"
@@ -108,8 +108,8 @@
           <el-table :data="parkList" stripe style="width: 100%">
             <el-table-column prop="name" label="名称"> </el-table-column>
             <el-table-column prop="pay" label="价格"> </el-table-column>
-            <el-table-column prop="amount" label="金额"> </el-table-column>
-            <el-table-column prop="energy" label="电量"> </el-table-column>
+            <!-- <el-table-column prop="amount" label="金额"> </el-table-column>
+            <el-table-column prop="energy" label="电量"> </el-table-column> -->
             <el-table-column prop="duration" label="时长"> </el-table-column>
             <el-table-column
               prop="type"

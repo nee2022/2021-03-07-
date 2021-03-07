@@ -14,12 +14,12 @@
             <el-input v-model="b" class="addinput"></el-input>
           </el-form-item>
 
-          <el-form-item label="金额:">
+          <!-- <el-form-item label="金额:">
             <el-input v-model="amountC" class="addinput"></el-input>
           </el-form-item>
           <el-form-item label="电量:">
             <el-input v-model="energyC" class="addinput"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="时长:">
             <el-input v-model="c" class="addinput"></el-input>
           </el-form-item>
@@ -52,7 +52,7 @@
         <headMsg></headMsg>
 
         <div class="right-con-top">
-          <el-select
+          <!-- <el-select
             v-model="values"
             placeholder="请选择套餐级别"
             class="eees"
@@ -65,7 +65,7 @@
               :value="item.value"
             >
             </el-option>
-          </el-select>
+          </el-select> -->
           <div class="textBox input_right">
             <img src="../../assets/images/search.png" class="sear-img" />
             <el-input
@@ -84,7 +84,7 @@
               >查询</el-button
             >
           </div>
-          <div class="zhandian">
+          <!-- <div class="zhandian">
             <el-button
               style="width: 100px"
               type="primary"
@@ -92,7 +92,7 @@
               class="but but2"
               >重置</el-button
             >
-          </div>
+          </div> -->
           <div class="zhandian">
             <el-button
               style="width: 100px"
@@ -108,8 +108,8 @@
           <el-table :data="parkList" stripe style="width: 100%">
             <el-table-column prop="name" label="名称"> </el-table-column>
             <el-table-column prop="pay" label="价格"> </el-table-column>
-            <el-table-column prop="amount" label="金额"> </el-table-column>
-            <el-table-column prop="energy" label="电量"> </el-table-column>
+            <!-- <el-table-column prop="amount" label="金额"> </el-table-column>
+            <el-table-column prop="energy" label="电量"> </el-table-column> -->
             <el-table-column prop="duration" label="时长"> </el-table-column>
             <el-table-column
               prop="type"
@@ -151,9 +151,9 @@
           <div class="road-bottom-right">
             <el-pagination
               background
-              :current-page="newpark"
+              :current-page.sync.number="newpark"
               @current-change="parksNumber"
-              :page-size="pagepark"
+              :page-size="pagesizex"
               layout="prev, pager, next"
               :total="parkTotal"
               small
@@ -183,6 +183,7 @@ export default {
       amountC: "",
       d: "",
       name: "",
+      pagesizex: 9,
       stations: false,
       msgss: "",
       total: 1,
@@ -382,19 +383,21 @@ export default {
     },
     getParksMes() {
       let toKen = this.token.replace(/\"/g, "");
-      let url = `admin/api/station/${this.stationsId}/packages?token=${toKen}&page=${this.newpark}&row=8`;
+      let url = `admin/api/packages?token=${toKen}&page=${this.newpark}&row=${this.pagesizex}&station=${this.stationsId}`;
       console.log("getUrl");
       console.log(url);
       this.$axios.get(url).then(res => {
         if (res.status == 200) {
           this.parkList = res.data.packages; //用户列表数据
-          this.parkTotal = res.data.packages.length;
+          console.log("parkList");
+          console.log(this.parkList);
+          this.parkTotal = res.data.total;
         }
       });
     },
     handleCurrentChange(newPage) {
       this.pagenum = newPage;
-      this.getRoadMes();
+      this.getParksMes();
     },
     parksNumber(parknum) {
       this.newpark = parknum;
