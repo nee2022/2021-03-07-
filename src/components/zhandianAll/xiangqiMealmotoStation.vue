@@ -10,7 +10,7 @@
           <el-form-item label="名称:">
             <el-input v-model="a" class="addinput"></el-input>
           </el-form-item>
-          <el-form-item label="价格:">
+          <el-form-item label="价格/元:">
             <el-input v-model="b" class="addinput"></el-input>
           </el-form-item>
 
@@ -20,7 +20,7 @@
           <el-form-item label="电量:">
             <el-input v-model="energyC" class="addinput"></el-input>
           </el-form-item> -->
-          <el-form-item label="时长:">
+          <el-form-item label="时长/分:">
             <el-input v-model="c" class="addinput"></el-input>
           </el-form-item>
           <el-form-item label="类型:">
@@ -108,10 +108,10 @@
         <template>
           <el-table :data="parkList" stripe style="width: 100%">
             <el-table-column prop="name" label="名称"> </el-table-column>
-            <el-table-column prop="pay" label="价格"> </el-table-column>
+            <el-table-column prop="pay" label="价格/元"> </el-table-column>
             <!-- <el-table-column prop="amount" label="金额"> </el-table-column>
             <el-table-column prop="energy" label="电量"> </el-table-column> -->
-            <el-table-column prop="duration" label="时长"> </el-table-column>
+            <el-table-column prop="duration" label="时长/分"> </el-table-column>
             <el-table-column
               prop="type"
               label="类型"

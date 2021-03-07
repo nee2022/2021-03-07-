@@ -37,8 +37,8 @@
         <el-table :data="menuList" stripe style="width: 95%">
           <el-table-column prop="id" label="套餐ID"> </el-table-column>
           <el-table-column prop="name" label="名称"> </el-table-column>
-          <el-table-column prop="pay" label="价格"> </el-table-column>i'x
-          <el-table-column prop="duration" label="时长"> </el-table-column>
+          <el-table-column prop="pay" label="价格/元"> </el-table-column>i'x
+          <el-table-column prop="duration" label="时长/分"> </el-table-column>
           <el-table-column prop="type" label="类型" :formatter="formatterType">
           </el-table-column>
           <el-table-column prop="address" label="操作" width="200">
@@ -92,10 +92,10 @@
         <el-form-item label="名称" prop="name">
           <el-input v-model="addForm.name" class="addinput"></el-input>
         </el-form-item>
-        <el-form-item label="价格" prop="pay">
+        <el-form-item label="价格/元" prop="pay">
           <el-input v-model="addForm.pay" class="addinput"></el-input>
         </el-form-item>
-        <el-form-item label="时长" prop="duration">
+        <el-form-item label="时长/分" prop="duration">
           <el-input v-model="addForm.duration" class="addinput"></el-input>
         </el-form-item>
         <el-form-item label="类型:">

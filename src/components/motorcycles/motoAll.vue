@@ -624,9 +624,6 @@ export default {
     this.token = localStorage.getItem("token");
     this.getRoadMes();
     // this.getRoadChargers()
-    setTimeout(() => {
-      this.getRoadChargers();
-    }, 500);
   },
   methods: {
     huodeid(id, name, type, address, memo, lot_rate_group, rate_group, kong) {
@@ -669,6 +666,7 @@ export default {
             this.getFristID = this.tableData[0].id;
             this.isActive = this.tableData[0].id;
             console.log(this.tableData);
+            this.getRoadChargers();
           }
         });
     },
