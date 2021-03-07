@@ -36,8 +36,11 @@
       <template>
         <el-table :data="menuList" stripe style="width: 95%">
           <el-table-column prop="id" label="套餐ID"> </el-table-column>
-          <el-table-column prop="pay" label="金额"> </el-table-column>
-          <el-table-column prop="duration" label="充电时长"> </el-table-column>
+          <el-table-column prop="name" label="名称"> </el-table-column>
+          <el-table-column prop="pay" label="价格"> </el-table-column>i'x
+          <el-table-column prop="duration" label="时长"> </el-table-column>
+          <el-table-column prop="type" label="类型" :formatter="formatterType">
+          </el-table-column>
           <el-table-column prop="address" label="操作" width="200">
             <template slot-scope="scope">
               <div class="operation">
@@ -86,14 +89,20 @@
         ref="addFormRef"
         label-width="80px"
       >
-        <!-- <el-form-item label="套餐标题" prop="name">
-					<el-input v-model="addForm.name" class="addinput"></el-input>
-				</el-form-item> -->
-        <el-form-item label="套餐价格" prop="pay">
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="addForm.name" class="addinput"></el-input>
+        </el-form-item>
+        <el-form-item label="价格" prop="pay">
           <el-input v-model="addForm.pay" class="addinput"></el-input>
         </el-form-item>
-        <el-form-item label="充电时长" prop="duration">
+        <el-form-item label="时长" prop="duration">
           <el-input v-model="addForm.duration" class="addinput"></el-input>
+        </el-form-item>
+        <el-form-item label="类型:">
+          <el-select v-model="addForm.type" placeholder="请选择">
+            <el-option label="电能" value="2" disabled></el-option>
+            <el-option label="时间" value="3"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -109,14 +118,20 @@
       @close="editDialogClosed"
     >
       <el-form :model="editForm" ref="editFormRef" label-width="80px">
-        <!-- <el-form-item label="套餐标题" prop="name">
-			 	<el-input v-model="editForm.name" class="addinput"></el-input>
-			 </el-form-item> -->
-        <el-form-item label="套餐价格" prop="pay">
-          <el-input v-model="editForm.pay" class="addinput"></el-input>
+        <el-form-item label="名称" prop="name">
+          <el-input v-model="addForm.name" class="addinput"></el-input>
         </el-form-item>
-        <el-form-item label="充电时长" prop="duration">
-          <el-input v-model="editForm.duration" class="addinput"></el-input>
+        <el-form-item label="价格" prop="pay">
+          <el-input v-model="addForm.pay" class="addinput"></el-input>
+        </el-form-item>
+        <el-form-item label="时长" prop="duration">
+          <el-input v-model="addForm.duration" class="addinput"></el-input>
+        </el-form-item>
+        <el-form-item label="类型:">
+          <el-select v-model="addForm.type" placeholder="请选择">
+            <el-option label="电能" value="2" disabled></el-option>
+            <el-option label="时间" value="3"></el-option>
+          </el-select>
         </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
@@ -144,6 +159,10 @@ export default {
       dialogVisible: false,
       addDialogVisible: false,
       editDialogVisible: false, //控制修改设备对话框显示隐藏
+      tcName: "",
+      tcPay: "",
+      tcDuration: "",
+      tcType: "",
       add: false,
       selected: 0, //下拉框
       pagenum: 1, //分页
@@ -207,8 +226,9 @@ export default {
       // },
       addForm: {
         token: localStorage.getItem("token").replace(/\"/g, ""),
-        // name: '',
+        name: "",
         pay: "",
+        type: "",
         duration: "",
         source: "qr"
       }, //添加设备添加数据
@@ -257,6 +277,19 @@ export default {
     this.getUserMes();
   },
   methods: {
+    formatterType: function(row, column, cellValue) {
+      var ret = ""; //你想在页面展示的值
+      if (cellValue === 1) {
+        ret = "金额"; //根据自己的需求设定
+      } else if (cellValue === 2) {
+        ret = "电能";
+      } else if (cellValue === 3) {
+        ret = "时间";
+      } else {
+        ret = "未知";
+      }
+      return ret;
+    },
     handleOpen(key, keyPath) {},
     handleClose(key, keyPath) {},
     //获取用户卡信息列表
@@ -357,11 +390,7 @@ export default {
         } else {
           if (confirm("确认修改吗?")) {
             this.$axios
-              .put("admin/api/package/" + this.editForm.id, {
-                token: toKen,
-                pay: this.editForm.pay,
-                duration: this.editForm.duration
-              })
+              .put("admin/api/package/" + this.editForm.id, this.addForm)
               .then(res => {
                 if (res.status !== 200) {
                   return this.$message.error("修改失败!");
