@@ -1,0 +1,75 @@
+// 默认样式
+.zyhDataBoardMainPage {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  *, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  li {
+    list-style-position: inside;
+    list-style-type: none;
+  }
+
+  .clearfix::after {
+    content: '';
+    display: block;
+    clear: both;
+  }
+
+  height: 100vh;
+  display: flex;
+  flex-flow: column;
+
+  header {
+    display: flex;
+    flex-direction: column;
+
+    .infoArea {
+      height: 102px;
+      display: flex;
+      flex-direction: row;
+      position: relative;
+
+      .pageName {
+        flex-grow: 1;
+        font-family: PingFangSC-Regular;
+        font-size: 24px;
+        font-weight: normal;
+        font-stretch: normal;
+        letter-spacing: 1px;
+        color: #000000;
+        line-height: 102px;
+        text-indent: 38px;
+      }
+
+      .profile {
+        margin-top: 40px;
+        margin-right: 37px;
+      }
+    }
+
+    .toggleBar {
+      height: 18px;
+      font-size: 15px;
+      font-family: PingFang SC;
+      font-weight: normal;
+      color: #6E6E70;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      span {
+        margin-left: 45px;
+      }
+    }
+  }
+
+  section {
+    flex-grow: 1;
+  }
+}
