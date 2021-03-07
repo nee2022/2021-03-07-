@@ -153,7 +153,7 @@
 								</div>
 							</template>
 							<el-menu-item-group>
-								<el-menu-item index="3-1">
+								<!-- <el-menu-item index="3-1">
 									<router-link to="/cartaocan">
 										<div class="menu-op">
 											<div>
@@ -162,7 +162,7 @@
 											<span class="menu-word">所有</span>
 										</div>
 									</router-link>
-								</el-menu-item>
+								</el-menu-item> -->
 								<el-menu-item index="3-2">
 									<router-link to="/meal">
 										<div class="menu-op">

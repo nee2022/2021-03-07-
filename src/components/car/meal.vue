@@ -7,25 +7,23 @@
 
       <el-dialog :title="name" :visible.sync="dialogVisible" width="30%">
         <el-form>
-          <el-form-item label="套餐名字:">
-            <el-input v-model="a" class="addinput"></el-input>
+          <el-form-item label="名称:">
+            <el-input v-model="tcName" class="addinput"></el-input>
           </el-form-item>
-          <el-form-item label="支付金额:">
-            <el-input v-model="b" class="addinput"></el-input>
+          <el-form-item label="价格:">
+            <el-input v-model="tcPay" class="addinput"></el-input>
           </el-form-item>
-                    <el-form-item label="金额:">
-            <el-input v-model="c" class="addinput"></el-input>
+                     <el-form-item label="电量:">
+            <el-input v-model="tcEnergy" class="addinput"></el-input>
+          </el-form-item>
+                     <el-form-item label="时长:">
+            <el-input v-model="tcDuration" class="addinput"></el-input>
           </el-form-item>
             <el-form-item label="类型:">
 
-          <el-select  v-model="value" placeholder="金额">
-            <el-option 
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
+          <el-select  v-model="tcType" placeholder="请选择">
+          <el-option label="电能" value=2></el-option>
+         <el-option label="时间" value=3></el-option>
           </el-select>
           </el-form-item>
         </el-form>
@@ -89,9 +87,10 @@
         <template>
           <el-table :data="parkList" stripe style="width: 100%">
             <el-table-column prop="id" label="套餐ID"> </el-table-column>
-            <el-table-column prop="type" label="套餐类型"> </el-table-column>
-            <el-table-column prop="pay" label="支付金额"> </el-table-column>
+               <el-table-column prop="name" label="名称"> </el-table-column>
+            <el-table-column prop="pay" label="价格"> </el-table-column>
             <el-table-column prop="energy" label="电量"> </el-table-column>
+            <el-table-column prop="type" label="类型"> </el-table-column>
             <el-table-column prop="address" label="操作">
               <template slot-scope="scope">
                 <div class="operation">
@@ -153,6 +152,11 @@ export default {
       parkList: [],
       dialogVisible: false,
       flag: false,
+      tcName:"",
+      tcPay:"",
+      tcEnergy:"",
+      tcDuration:"",
+      tcType:"",
       a: "",
       b: "",
       c: "",
@@ -171,16 +175,15 @@ export default {
         "充电完成",
       ],
       options: [
-        {
-          value: "选项1",
-          label: "金额",
-        },
+      
         {
           value: "选项2",
+          type:2,
           label: "电能",
         },
         {
           value: "选项3",
+          type:3,
           label: "时间",
         },
       ],
@@ -292,13 +295,16 @@ export default {
             "/admin/api/package?token=" +
               toKen +
               "&name=" +
-              this.a +
+              this.tcName +
               "&pay=" +
-              this.b +
-              "&amount=" +
-              this.c +
+              this.tcPay +
+              "&energy=" +
+              this.tcEnergy +
+              "&duration=" +
+              this.tcDuration +
               "&source=qr&type=" +
-              this.value
+              this.tcType
+              + "&service=30&source=qr"
           )
           .then((res) => {
             console.log(res);
@@ -310,11 +316,12 @@ export default {
             }
             console.log(res.data.error);
           });
-        this.a = "";
-        this.b = "";
-        this.c = "";
-        this.d = "";
-        this.value = "金额";
+        this.tcName = "";
+        this.tcPay = "";
+        this.tcEnergy = "";
+        this.tcDuration= "";
+        this.tcEnergy = "";
+        this.tcType = "";
       }
     },
     names() {
@@ -328,7 +335,7 @@ export default {
             toKen +
             "&page=" +
             this.newpark +
-            "&row=16&source=qr"
+            "&row=16&service=30&source=qr" 
         )
         .then((res) => {
           console.log(res);
