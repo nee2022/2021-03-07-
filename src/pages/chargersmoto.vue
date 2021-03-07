@@ -65,6 +65,18 @@
                 </div>
               </router-link>
             </el-menu-item>
+            <el-menu-item index="4">
+              <router-link to="xiangqiMealmotoStation">
+                <div class="menu-op">
+                  <div>
+                    <img src="../assets/images/sim.png" />
+                  </div>
+                  <span class="menu-word" style="font-size: 14px"
+                    >刷卡套餐</span
+                  >
+                </div>
+              </router-link>
+            </el-menu-item>
             <!-- <el-submenu index="2">
 							<template slot="title">
 								<div class="menu-op">

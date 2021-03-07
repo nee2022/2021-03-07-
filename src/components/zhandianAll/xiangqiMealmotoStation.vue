@@ -254,8 +254,11 @@ export default {
   },
   methods: {
     search() {
+      if (!this.msgss) {
+        this.getParksMes();
+      }
       let toKen = this.token.replace(/\"/g, "");
-      let url = `admin/api/packages?token=${toKen}&page=${this.newpark}&row=${this.pagesizex}&station=${this.stationsId}&keyword=${this.msgss}`;
+      let url = `admin/api/packages?token=${toKen}&page=${this.newpark}&row=${this.pagesizex}&agent=0&station=${this.stationsId}&charger=0&agent=0&service=10&source=qr&keyword=${this.msgss}`;
       console.log("searchUrl");
       console.log(url);
       this.$axios.get(url).then(res => {
@@ -374,8 +377,9 @@ export default {
           "&amount=" +
           this.amountC +
           "&type=" +
-          this.value;
-        console.log("url");
+          this.value +
+          "&agent=0&charger=0&source=qr&service=10";
+        console.log("Purl");
         console.log(url);
         this.$axios.post(url).then(res => {
           if (res.data.error == 0) {
@@ -398,7 +402,7 @@ export default {
     },
     getParksMes() {
       let toKen = this.token.replace(/\"/g, "");
-      let url = `admin/api/packages?token=${toKen}&page=${this.newpark}&row=${this.pagesizex}&station=${this.stationsId}`;
+      let url = `admin/api/packages?token=${toKen}&page=${this.newpark}&row=${this.pagesizex}&agent=0&station=${this.stationsId}&charger=0&agent=0&service=10&source=qr`;
       console.log("getUrl");
       console.log(url);
       this.$axios.get(url).then(res => {

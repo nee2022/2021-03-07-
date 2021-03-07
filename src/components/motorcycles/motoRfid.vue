@@ -99,7 +99,7 @@
           <el-input v-model="addForm.duration" class="addinput"></el-input>
         </el-form-item>
         <el-form-item label="类型:">
-          <el-select v-model="addForm.type" placeholder="请选择">
+          <el-select v-model="addForm.type" placeholder="时间" disabled>
             <el-option label="电能" value="2" disabled></el-option>
             <el-option label="时间" value="3"></el-option>
           </el-select>
@@ -128,7 +128,7 @@
           <el-input v-model="addForm.duration" class="addinput"></el-input>
         </el-form-item>
         <el-form-item label="类型:">
-          <el-select v-model="addForm.type" placeholder="请选择">
+          <el-select v-model="addForm.type" placeholder="时间" disabled>
             <el-option label="电能" value="2" disabled></el-option>
             <el-option label="时间" value="3"></el-option>
           </el-select>
@@ -228,7 +228,10 @@ export default {
         token: localStorage.getItem("token").replace(/\"/g, ""),
         name: "",
         pay: "",
-        type: "",
+        type: "3",
+        agent: 0,
+        station: 0,
+        charger: 0,
         service: 10,
         duration: "",
         source: "rfid"
@@ -296,6 +299,23 @@ export default {
     //获取用户卡信息列表
     getUserMes() {
       //token去掉引号
+      if (!this.input2) {
+        let toKen = this.token.replace(/\"/g, "");
+        this.$axios
+          .get(
+            "/admin/api/packages/?token=" +
+              toKen +
+              "&page=" +
+              this.pagenum +
+              "&row=14&agent=0&station=0&charger=0&source=rfid&service=10"
+          )
+          .then(res => {
+            if (res.status == 200) {
+              this.menuList = res.data.packages; //用户列表数据
+              this.total = res.data.total;
+            }
+          });
+      }
       let toKen = this.token.replace(/\"/g, "");
       this.$axios
         .get(
@@ -303,7 +323,7 @@ export default {
             toKen +
             "&page=" +
             this.pagenum +
-            "&row=14&source=rfid&service=10&keyword=" +
+            "&row=14&agent=0&station=0&charger=0&source=rfid&service=10&keyword=" +
             this.input2
         )
         .then(res => {

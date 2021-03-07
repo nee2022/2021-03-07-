@@ -99,8 +99,8 @@
           <el-input v-model="addForm.duration" class="addinput"></el-input>
         </el-form-item>
         <el-form-item label="类型:">
-          <el-select v-model="addForm.type" placeholder="请选择">
-            <el-option label="电能" value="2" disabled></el-option>
+          <el-select v-model="addForm.type" placeholder="时间" disabled>
+            <el-option label="电能" value="2"></el-option>
             <el-option label="时间" value="3"></el-option>
           </el-select>
         </el-form-item>
@@ -128,7 +128,7 @@
           <el-input v-model="addForm.duration" class="addinput"></el-input>
         </el-form-item>
         <el-form-item label="类型:">
-          <el-select v-model="addForm.type" placeholder="请选择">
+          <el-select v-model="addForm.type" placeholder="时间" disabled>
             <el-option label="电能" value="2" disabled></el-option>
             <el-option label="时间" value="3"></el-option>
           </el-select>
@@ -150,6 +150,20 @@ export default {
   },
   data() {
     return {
+      options: [
+        {
+          value: "选项1",
+          label: "金额"
+        },
+        {
+          value: "选项2",
+          label: "电能"
+        },
+        {
+          value: "选项3",
+          label: "时间"
+        }
+      ],
       menuList: [], //卡数据
       userList: [], //这个是我新建的
       option: "",
@@ -228,10 +242,13 @@ export default {
         token: localStorage.getItem("token").replace(/\"/g, ""),
         name: "",
         pay: "",
-        type: "",
+        type: "3",
         duration: "",
         source: "qr",
-        service: 10
+        service: 10,
+        agent: 0,
+        station: 0,
+        charger: 0
       }, //添加设备添加数据
       addFormRules: {
         // name: [{
@@ -297,13 +314,30 @@ export default {
     getUserMes() {
       //token去掉引号
       let toKen = this.token.replace(/\"/g, "");
+      if (!this.input2) {
+        this.$axios
+          .get(
+            "/admin/api/packages/?token=" +
+              toKen +
+              "&page=" +
+              this.pagenum +
+              "&row=14&source=qr&service=10&agent=0&station=0&charger=0"
+          )
+          .then(res => {
+            if (res.status == 200) {
+              this.menuList = res.data.packages; //用户列表数据
+              this.total = res.data.total;
+            }
+          });
+      }
+
       this.$axios
         .get(
           "/admin/api/packages/?token=" +
             toKen +
             "&page=" +
             this.pagenum +
-            "&row=14&source=qr&service=10&keyword=" +
+            "&row=14&source=qr&service=10&agent=0&station=0&charger=0&keyword=" +
             this.input2
         )
         .then(res => {

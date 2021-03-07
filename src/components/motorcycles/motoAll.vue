@@ -679,6 +679,10 @@ export default {
       //token去掉引号
       let toKen = this.token.replace(/\"/g, "");
       // console.log(toKen)
+      if (!this.input1) {
+        this.getRoadMes();
+        return;
+      }
       let url =
         "admin/api/stations?token=" +
         toKen +
@@ -725,6 +729,10 @@ export default {
     },
     search() {
       //token去掉引号
+      if (!this.input2) {
+        this.getRoadChargers();
+        return;
+      }
       let toKen = this.token.replace(/\"/g, "");
       // console.log(toKen)
       let url =
