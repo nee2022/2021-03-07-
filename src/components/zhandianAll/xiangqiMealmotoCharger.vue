@@ -52,7 +52,7 @@
         <headMsg></headMsg>
 
         <div class="right-con-top">
-          <el-select
+          <!-- <el-select
             v-model="values"
             placeholder="请选择套餐级别"
             class="eees"
@@ -65,7 +65,7 @@
               :value="item.value"
             >
             </el-option>
-          </el-select>
+          </el-select> -->
           <div class="textBox input_right">
             <img src="../../assets/images/search.png" class="sear-img" />
             <el-input
@@ -81,6 +81,7 @@
               type="primary"
               icon="el-icon-search"
               class="but but2"
+              @click="search"
               >查询</el-button
             >
           </div>
@@ -151,9 +152,9 @@
           <div class="road-bottom-right">
             <el-pagination
               background
-              :current-page="newpark"
+              :current-page.sync.number="newpark"
               @current-change="parksNumber"
-              :page-size="pagepark"
+              :page-size="pagesizex"
               layout="prev, pager, next"
               :total="parkTotal"
               small
@@ -183,6 +184,7 @@ export default {
       amountC: "",
       d: "",
       name: "",
+      pagesizex: 9,
       stations: false,
       msgss: "",
       total: 1,
@@ -251,6 +253,20 @@ export default {
     this.getParksMes();
   },
   methods: {
+    search() {
+      let toKen = this.token.replace(/\"/g, "");
+      let url = `admin/api/packages?token=${toKen}&page=${this.newpark}&row=${this.pagesizex}&charger=${this.stationsId}&keyword=${this.msgss}`;
+      console.log("searchUrl");
+      console.log(url);
+      this.$axios.get(url).then(res => {
+        if (res.status == 200) {
+          this.parkList = res.data.packages; //用户列表数据
+          console.log("searchparkList");
+          console.log(this.parkList);
+          this.parkTotal = res.data.total;
+        }
+      });
+    },
     formatterType: function(row, column, cellValue) {
       var ret = ""; //你想在页面展示的值
       if (cellValue === 1) {
@@ -382,19 +398,21 @@ export default {
     },
     getParksMes() {
       let toKen = this.token.replace(/\"/g, "");
-      let url = `admin/api/charger/${this.stationsId}/packages?token=${toKen}&page=${this.newpark}&row=8`;
+      let url = `admin/api/packages?token=${toKen}&page=${this.newpark}&row=${this.pagesizex}&charger=${this.stationsId}`;
       console.log("getUrl");
       console.log(url);
       this.$axios.get(url).then(res => {
         if (res.status == 200) {
           this.parkList = res.data.packages; //用户列表数据
-          this.parkTotal = res.data.packages.length;
+          console.log("parkList");
+          console.log(this.parkList);
+          this.parkTotal = res.data.total;
         }
       });
     },
     handleCurrentChange(newPage) {
       this.pagenum = newPage;
-      this.getRoadMes();
+      this.getParksMes();
     },
     parksNumber(parknum) {
       this.newpark = parknum;
