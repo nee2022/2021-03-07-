@@ -81,6 +81,7 @@
               type="primary"
               icon="el-icon-search"
               class="but but2"
+              @click="search"
               >查询</el-button
             >
           </div>
@@ -252,6 +253,20 @@ export default {
     this.getParksMes();
   },
   methods: {
+    search() {
+      let toKen = this.token.replace(/\"/g, "");
+      let url = `admin/api/packages?token=${toKen}&page=${this.newpark}&row=${this.pagesizex}&station=${this.stationsId}&keyword=${this.msgss}`;
+      console.log("searchUrl");
+      console.log(url);
+      this.$axios.get(url).then(res => {
+        if (res.status == 200) {
+          this.parkList = res.data.packages; //用户列表数据
+          console.log("searchparkList");
+          console.log(this.parkList);
+          this.parkTotal = res.data.total;
+        }
+      });
+    },
     formatterType: function(row, column, cellValue) {
       var ret = ""; //你想在页面展示的值
       if (cellValue === 1) {
