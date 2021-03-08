@@ -404,6 +404,9 @@ export default {
         .get("/admin/api/package/" + id + "?token=" + toKen) //根据id点击修改的id查询设备信息
         .then(res => {
           if (res.status == 200) {
+            this.addForm.name = res.data.package.name;
+            this.addForm.pay = res.data.package.pay;
+            this.addForm.duration = res.data.package.duration;
             this.editForm = res.data.package;
           }
         });
@@ -417,6 +420,7 @@ export default {
         pay: this.editForm.pay,
         duration: this.editForm.duration
       };
+
       console.log("对象");
       console.log(a);
       this.$refs.editFormRef.validate(valid => {
