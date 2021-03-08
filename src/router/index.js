@@ -54,15 +54,25 @@ import carsWhite from "../components/zhandianAll/carsWhite.vue";
 
 import basic from "../components/zhandianAll/basic.vue";
 
-import chargingRecordmotoStation from "../components/zhandianAll/chargingRecordmotoStation.vue";
+import basiccarStation from "../components/zhandianAll/basiccarStation.vue";
+import xiangqiMealcarStation from "../components/zhandianAll/xiangqiMealcarStation.vue";
+import xiangqiCardcarStation from "../components/zhandianAll/xiangqiCardcarStation.vue";
+import chargingRecordcarStation from "../components/zhandianAll/chargingRecordcarStation.vue";
+
+import basiccarCharger from "../components/zhandianAll/basiccarCharger.vue";
+import xiangqiMealcarCharger from "../components/zhandianAll/xiangqiMealcarCharger.vue";
+import xiangqiCardcarCharger from "../components/zhandianAll/xiangqiCardcarCharger.vue";
+import chargingRecordcarCharger from "../components/zhandianAll/chargingRecordcarCharger.vue";
+
+import basicmotoStation from "../components/zhandianAll/basicmotoStation.vue";
 import xiangqiMealmotoStation from "../components/zhandianAll/xiangqiMealmotoStation.vue";
 import xiangqiCardmotoStation from "../components/zhandianAll/xiangqiCardmotoStation.vue";
-import xiangqiCardmotoCharger from "../components/zhandianAll/xiangqiCardmotoCharger.vue";
-import basicmotoStation from "../components/zhandianAll/basicmotoStation.vue";
+import chargingRecordmotoStation from "../components/zhandianAll/chargingRecordmotoStation.vue";
 
-import chargingRecordmotoCharger from "../components/zhandianAll/chargingRecordmotoCharger.vue";
-import xiangqiMealmotoCharger from "../components/zhandianAll/xiangqiMealmotoCharger.vue";
 import basicmotoCharger from "../components/zhandianAll/basicmotoCharger.vue";
+import xiangqiMealmotoCharger from "../components/zhandianAll/xiangqiMealmotoCharger.vue";
+import xiangqiCardmotoCharger from "../components/zhandianAll/xiangqiCardmotoCharger.vue";
+import chargingRecordmotoCharger from "../components/zhandianAll/chargingRecordmotoCharger.vue";
 
 import chargingRate from "../components/zhandianAll/chargingRate.vue";
 import stopRate from "../components/zhandianAll/stopRate.vue";
@@ -82,6 +92,15 @@ import shebeiHistory from "../components/shebeiXinxi/shebeiHistory.vue";
 import stations from "../pages/stations";
 import stationsmoto from "../pages/stationsmoto";
 import chargersmoto from "../pages/chargersmoto";
+
+import stationscar from "../pages/stationscar";
+import chargerscar from "../pages/chargerscar";
+
+import stationsroad from "../pages/stationsroad";
+import chargersroad from "../pages/chargersroad";
+
+import stationslot from "../pages/stationslot";
+import chargerslot from "../pages/chargerslot";
 
 import vehicleDetectSystem from "../pages/vehicleDetectSystem/vehicleDetectSystem"; //本周增加模块
 import smartCommunity from "../pages/smartCommunity/smartCommunity"; //本周增加模块
@@ -1024,6 +1043,54 @@ export default new Router({
       redirect: "/basic"
     },
 
+    //汽车充电站点详情
+    {
+      path: "/stationscar",
+      component: stationscar,
+      children: [
+        {
+          path: "/basiccarStation",
+          component: basiccarStation
+        },
+        {
+          path: "/chargingRecordcarStation",
+          component: chargingRecordcarStation
+        },
+        {
+          path: "/xiangqiMealcarStation",
+          component: xiangqiMealcarStation
+        },
+        {
+          path: "/xiangqiCardcarStation",
+          component: xiangqiCardcarStation
+        }
+      ],
+      redirect: "/basiccarStation"
+    },
+    //汽车充电设备详情
+    {
+      path: "/chargerscar",
+      component: chargerscar,
+      children: [
+        {
+          path: "/basiccarCharger",
+          component: basiccarCharger
+        },
+        {
+          path: "/chargingRecordcarCharger",
+          component: chargingRecordcarCharger
+        },
+        {
+          path: "/xiangqiMealcarCharger",
+          component: xiangqiMealcarCharger
+        },
+        {
+          path: "/xiangqiCardcarCharger",
+          component: xiangqiCardcarCharger
+        }
+      ],
+      redirect: "/basiccarCharger"
+    },
     //电单车充电站点详情
     {
       path: "/stationsmoto",
@@ -1072,6 +1139,7 @@ export default new Router({
       ],
       redirect: "/basicmotoCharger"
     },
+
     //个人中心
 
     {

@@ -21,7 +21,7 @@
           >
             <el-submenu index="1">
               <template slot="title">
-                <router-link to="/basiccarStation">
+                <router-link to="/basiccarCharger">
                   <div class="menu-op">
                     <div>
                       <img src="../assets/images/shu.png" />
@@ -30,9 +30,31 @@
                   </div>
                 </router-link>
               </template>
+              <!-- <el-menu-item-group>
+                <el-menu-item index="1-2">
+                  <router-link to="/union">
+                    <div class="menu-op">
+                      <div>
+                        <img src="../assets/images/all.png" />
+                      </div>
+                      <span class="menu-word">二维码</span>
+                    </div>
+                  </router-link>
+                </el-menu-item>
+                <el-menu-item index="1-3">
+                  <router-link to="/shebe_online">
+                    <div class="menu-op">
+                      <div>
+                        <img src="../assets/images/zai.png" />
+                      </div>
+                      <span class="menu-word">一码通</span>
+                    </div>
+                  </router-link>
+                </el-menu-item>
+              </el-menu-item-group> -->
             </el-submenu>
             <el-menu-item index="4">
-              <router-link to="xiangqiMealcarStation">
+              <router-link to="xiangqiMealcarCharger">
                 <div class="menu-op">
                   <div>
                     <img src="../assets/images/sim.png" />
@@ -44,7 +66,7 @@
               </router-link>
             </el-menu-item>
             <el-menu-item index="4">
-              <router-link to="xiangqiCardcarStation">
+              <router-link to="xiangqiCardcarCharger">
                 <div class="menu-op">
                   <div>
                     <img src="../assets/images/sim.png" />
@@ -55,9 +77,80 @@
                 </div>
               </router-link>
             </el-menu-item>
-
+            <!-- <el-submenu index="2">
+							<template slot="title">
+								<div class="menu-op">
+									<div>
+										<img src="../assets/images/sim.png" />
+									</div>
+									<span class="menu-word">访问规则</span>
+								</div>
+							</template>
+							<el-menu-item-group>
+								<el-menu-item index="2-1">
+									<router-link to="/carsWhite">
+										<div class="menu-op">
+											<div>
+												<img src="../assets/images/all.png" />
+											</div>
+											<span class="menu-word">车牌白名单</span>
+										</div>
+									</router-link>
+								</el-menu-item>
+								<el-menu-item index="2-2">
+									<router-link to="/carBlac">
+										<div class="menu-op">
+											<div>
+												<img src="../assets/images/zai.png" />
+											</div>
+											<span class="menu-word">车牌黑名单</span>
+										</div>
+									</router-link>
+								</el-menu-item>
+								<el-menu-item index="2-3">
+                                    <router-link to="/carWhite">
+                                        <div class="menu-op">
+                                        <div>
+                                            <img src="../assets/images/li.png" />
+                                        </div>
+                                        <span class="menu-word">用户白名单</span>
+                                        </div>
+                                    </router-link>
+                                </el-menu-item>
+                                <el-menu-item index="2-3">
+                                    <router-link to="/carBlac">
+                                        <div class="menu-op">
+                                        <div>
+                                            <img src="../assets/images/li.png" />
+                                        </div>
+                                        <span class="menu-word">用户黑名单</span>
+                                        </div>
+                                    </router-link>
+                                </el-menu-item>
+							</el-menu-item-group>
+						</el-submenu> -->
+            <!-- <el-menu-item index="4">
+							<router-link to="/chargingRate">
+								<div class="menu-op">
+									<div>
+										<img src="../assets/images/sim.png" />
+									</div>
+									<span class="menu-word" style="font-size: 14px">充电费率</span>
+								</div>
+							</router-link>
+						</el-menu-item> -->
+            <!-- <el-menu-item index="4">
+							<router-link to="/stopRate">
+								<div class="menu-op">
+									<div>
+										<img src="../assets/images/sim.png" />
+									</div>
+									<span class="menu-word" style="font-size: 14px">停车费率</span>
+								</div>
+							</router-link>
+						</el-menu-item> -->
             <el-menu-item index="4">
-              <router-link to="/chargingRecordcarStation">
+              <router-link to="/chargingRecordcarCharger">
                 <div class="menu-op">
                   <div>
                     <img src="../assets/images/sim.png" />

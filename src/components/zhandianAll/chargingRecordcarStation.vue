@@ -2,7 +2,7 @@
   <div class="tem-right">
     <div class="tem-right-top">
       <div class="top-left">
-        <div class="top-left-word">停车费率</div>
+        <div class="top-left-word">充电记录</div>
       </div>
 
       <el-dialog :title="name" :visible.sync="dialogVisible" width="30%">
@@ -69,17 +69,12 @@
         <template>
           <el-table :data="parkList" stripe style="width: 100%">
             <el-table-column prop="id" label="ID"> </el-table-column>
-            <el-table-column prop="name" label="费率名称"> </el-table-column>
-            <el-table-column label="类型">
-              <template slot-scope="scope">
-                <div style="text-align: center !important">
-                  {{ types[scope.row.type] }}
-                </div>
-              </template>
+            <el-table-column prop="deal_no" label="订单号"> </el-table-column>
+            <el-table-column prop="paid_time" label="支付时间">
             </el-table-column>
-            <el-table-column prop="start_time" label="开始时间">
+            <el-table-column prop="amount" label="订单金额">
             </el-table-column>
-            <el-table-column prop="end_time	" label="结束时间"> </el-table-column>
+            <el-table-column prop="pay	" label="支付金额"> </el-table-column>
             <el-table-column prop="address" label="操作" width="200">
               <template>
                 <div class="operation">
@@ -146,11 +141,11 @@ export default {
       tableData: [],
       parkList: [],
       stationsId: "",
-      types: ["按时长（分钟）", "", "按次数"],
+      types: ["系统", "管理员", "运营商", "用户", "收费员", "抓拍机", "地磁", "高位视频", "低位视频", "巡检车", "合作方"],
     };
   },
   created() {
-    this.stationsId = this.$store.state.lot_rate_group;
+    this.stationsId = this.$store.state.id;
     this.stationsName = this.$store.state.name;
     this.token = localStorage.getItem("token");
     this.getParksMes();
@@ -176,14 +171,14 @@ export default {
       let toKen = this.token.replace(/\"/g, "");
       this.$axios
         .get(
-          `/admin/api/lot_rate/group/${this.stationsId}/lot_rates?token=${toKen}&page=${this.newpark}&row=8`
+          `admin/api/station/${this.stationsId}/payments?token=${toKen}&page=${this.newpark}&row=8`
         )
         .then((res) => {
           console.log(res);
           // console.log(res.data.users)
           // console.log(res.status)//打印状态码
           if (res.status == 200) {
-            this.parkList = res.data.lot_rates; //用户列表数据
+            this.parkList = res.data.payments; //用户列表数据
             this.parkTotal = res.data.total;
             //   console.log(this.parkList);
           }

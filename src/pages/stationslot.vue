@@ -21,7 +21,7 @@
           >
             <el-submenu index="1">
               <template slot="title">
-                <router-link to="/basiccarStation">
+                <router-link to="/basicmotoStation">
                   <div class="menu-op">
                     <div>
                       <img src="../assets/images/shu.png" />
@@ -32,7 +32,7 @@
               </template>
             </el-submenu>
             <el-menu-item index="4">
-              <router-link to="xiangqiMealcarStation">
+              <router-link to="xiangqiMealmotoStation">
                 <div class="menu-op">
                   <div>
                     <img src="../assets/images/sim.png" />
@@ -44,7 +44,7 @@
               </router-link>
             </el-menu-item>
             <el-menu-item index="4">
-              <router-link to="xiangqiCardcarStation">
+              <router-link to="xiangqiCardmotoStation">
                 <div class="menu-op">
                   <div>
                     <img src="../assets/images/sim.png" />
@@ -57,7 +57,7 @@
             </el-menu-item>
 
             <el-menu-item index="4">
-              <router-link to="/chargingRecordcarStation">
+              <router-link to="/chargingRecordmotoStation">
                 <div class="menu-op">
                   <div>
                     <img src="../assets/images/sim.png" />
@@ -130,7 +130,7 @@ export default {
     out() {
       // this.$router.go(-1);
       this.$router.push({
-        path: "/carAll"
+        path: "/motoAll"
       });
     }
   }
