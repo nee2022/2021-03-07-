@@ -329,6 +329,16 @@ export default {
     id(id) {
       this.lest_id = id;
       this.name = "修改套餐";
+      let toKen = this.token.replace(/\"/g, "");
+      this.$axios
+        .get("/admin/api/package/" + id + "?token=" + toKen) //根据id点击修改的id查询设备信息
+        .then(res => {
+          if (res.status == 200) {
+            this.a = res.data.package.name;
+            this.b = res.data.package.pay;
+            this.c = res.data.package.duration;
+          }
+        });
     },
 
     add() {
