@@ -4,7 +4,10 @@ import Router from "vue-router";
 import refresh from "../pages/refresh";
 
 import dataBoard from "../pages/merchantAsset/dataViewComponent/dataBoard.vue";
-import merchantAccount from "../pages/merchantAsset/merchantAccountComponent/merchantAccount.vue";
+import merchantAccountAll from "../pages/merchantAsset/merchantAccountComponent/merchantAccountAll.vue";
+import merchantAccountType1 from "../pages/merchantAsset/merchantAccountComponent/merchantAccountType1.vue";
+import merchantAccountType2 from "../pages/merchantAsset/merchantAccountComponent/merchantAccountType2.vue";
+import merchantAccountType3 from "../pages/merchantAsset/merchantAccountComponent/merchantAccountType3.vue";
 import orderRecord from "../pages/merchantAsset/financialManagementComponent/orderRecord.vue";
 import shareRecord from "../pages/merchantAsset/financialManagementComponent/shareRecord.vue";
 import withdrawalRecord from "../pages/merchantAsset/financialManagementComponent/withdrawalRecord.vue";
@@ -23,6 +26,11 @@ const routes = [
   { path: "/refresh", component: refresh },
 
   { path: "/merchantAsset/dataBoard", component: dataBoard },
+
+  { path: "/merchantAsset/agent", component: merchantAccountAll },
+  { path: "/merchantAsset/agent/type/1", component: merchantAccountType1 },
+  { path: "/merchantAsset/agent/type/2", component: merchantAccountType2 },
+  { path: "/merchantAsset/agent/type/3", component: merchantAccountType3 },
 
   { path: "/merchantAsset/orderRecord", component: orderRecord },
   { path: "/merchantAsset/shareRecord", component: shareRecord },

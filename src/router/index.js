@@ -113,7 +113,7 @@ export default new Router({
       component: ito
     },
     {
-      path: "/merchantAsset/agent",
+      path: "/merchantAsset/dataBoard",
       component: merchantAsset
     },
     {

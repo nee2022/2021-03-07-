@@ -2,7 +2,7 @@
   <div class="zyhSingleLineListMainPage">
     <header>
       <div class="infoArea">
-        <div class="pageName">商户资产</div>
+        <div class="pageName">商户资产1</div>
         <div class="profile"><myhead></myhead></div>
       </div>
       <div class="searchArea">
