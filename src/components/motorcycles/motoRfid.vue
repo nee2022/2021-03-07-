@@ -2,7 +2,7 @@
   <div class="oneCard-right">
     <div class="UserAssets-right-top">
       <div class="user-left">
-        <span class="user-word">扫码套餐</span>
+        <span class="user-word">刷卡套餐</span>
       </div>
       <div class="users-right">
         <myhead></myhead>

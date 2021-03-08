@@ -158,7 +158,9 @@ export default {
             return this.$message.error("修改失败!");
           }
           this.$message.success("修改成功!");
-          this.getStationMes();
+          setTimeout(() => {
+            this.getStationMes();
+          }, 888);
         });
     },
     leave2() {

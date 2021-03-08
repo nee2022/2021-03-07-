@@ -115,11 +115,9 @@ export default {
   },
   created() {
     this.token = localStorage.getItem("token");
-
     this.stationsId = this.$store.state.id;
-    this.input = this.$store.state.name;
-    this.weiInput = this.$store.state.address;
-    this.text = this.$store.state.memo;
+    this.getStationMes();
+
     if (this.$store.state.type == 1) {
       this.typeInput = "汽车充电C";
     } else if (this.$store.state.type == 4) {
@@ -131,27 +129,39 @@ export default {
     }
   },
   methods: {
+    getStationMes() {
+      let toKen = this.token.replace(/\"/g, "");
+      let url = `/admin/api/charger/${this.stationsId}?token=${toKen}`;
+      this.$axios.get(url).then(res => {
+        console.log("res.data.name");
+        console.log(res.data);
+        console.log(res.data.charger);
+        this.input = res.data.charger.name;
+        this.weiInput = res.data.charger.address;
+        this.text = res.data.charger.memo;
+      });
+    },
     clear() {
       this.weiInput = "";
       this.text = "";
     },
     xiu() {
       let toKen = this.token.replace(/\"/g, "");
-      this.$axios
-        .put(
-          `/admin/api/station/${this.stationsId}?token=${toKen}&address=${this.weiInput}&memo=${this.text}`
-        )
-        .then(res => {
-          console.log(res);
-          // console.log(res.data.users)
-          // console.log(res.status)//打印状态码
-          if (res.status !== 200) {
-            return this.$message.error("修改失败!");
-          }
-          this.$message.success("修改成功!");
-          this.weiInput = "";
-          this.text = "";
-        });
+      let url = `/admin/api/charger/${this.stationsId}?token=${toKen}&address=${this.weiInput}&memo=${this.text}`;
+      console.log("url");
+      console.log(url);
+      this.$axios.put(url).then(res => {
+        console.log(res);
+        // console.log(res.data.users)
+        // console.log(res.status)//打印状态码
+        if (res.status !== 200) {
+          return this.$message.error("修改失败!");
+        }
+        this.$message.success("修改成功!");
+        setTimeout(() => {
+          this.getStationMes();
+        }, 888);
+      });
     },
     leave2() {
       this.isgos = false;

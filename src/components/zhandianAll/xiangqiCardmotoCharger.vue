@@ -2,7 +2,7 @@
   <div class="tem-right">
     <div class="tem-right-top">
       <div class="top-left">
-        <div class="top-left-word">扫码套餐</div>
+        <div class="top-left-word">刷卡套餐</div>
       </div>
 
       <el-dialog :title="name" :visible.sync="stations" width="30%">
