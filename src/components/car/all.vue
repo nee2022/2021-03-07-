@@ -94,7 +94,7 @@
 											<div title="删除" @click="removeUserByID1(scope.row.id)">
 												<img src="../../assets/images/shan2.png">
 											</div>
-											<router-link to="/stations">
+											<router-link to="/stationscar">
 												<div title="详情" @click="huodeid(scope.row.package,scope.row.id,scope.row.name,scope.row.type,scope.row.address,scope.row.memo,scope.row.lot_rate_group,scope.row.rate_group)">
 													<img src="../../assets/images/lan.png">
 												</div>
@@ -166,7 +166,7 @@
 									<div>
 										<el-button type="text" @click="(dialogVisible = true), id(scope.row.id)"><img title="修改" src="../../assets/images/compile.png" /></el-button>
 									</div>
-									<router-link to="/chargersXi">
+									<router-link to="/chargerscar">
 										<div @click="huodeid(scope.row.package,scope.row.id,scope.row.name,scope.row.type,scope.row.address,scope.row.memo,scope.row.lot_rate_group,scope.row.rate_group,kong)">
 											<img title="详情" style="height:14px;width:19px" src="../../assets/images/see.png">
 										</div>
