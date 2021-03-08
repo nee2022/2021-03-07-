@@ -56,6 +56,8 @@ import basic from "../components/zhandianAll/basic.vue";
 
 import chargingRecordmotoStation from "../components/zhandianAll/chargingRecordmotoStation.vue";
 import xiangqiMealmotoStation from "../components/zhandianAll/xiangqiMealmotoStation.vue";
+import xiangqiCardmotoStation from "../components/zhandianAll/xiangqiCardmotoStation.vue";
+import xiangqiCardmotoCharger from "../components/zhandianAll/xiangqiCardmotoCharger.vue";
 import basicmotoStation from "../components/zhandianAll/basicmotoStation.vue";
 
 import chargingRecordmotoCharger from "../components/zhandianAll/chargingRecordmotoCharger.vue";
@@ -1038,6 +1040,10 @@ export default new Router({
         {
           path: "/xiangqiMealmotoStation",
           component: xiangqiMealmotoStation
+        },
+        {
+          path: "/xiangqiCardmotoStation",
+          component: xiangqiCardmotoStation
         }
       ],
       redirect: "/basicmotoStation"
@@ -1058,6 +1064,10 @@ export default new Router({
         {
           path: "/xiangqiMealmotoCharger",
           component: xiangqiMealmotoCharger
+        },
+        {
+          path: "/xiangqiCardmotoCharger",
+          component: xiangqiCardmotoCharger
         }
       ],
       redirect: "/basicmotoCharger"
