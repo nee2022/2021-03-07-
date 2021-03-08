@@ -2,7 +2,7 @@
   <div class="zyhSingleLineListMainPage">
     <header>
       <div class="infoArea">
-        <div class="pageName">商户资产3</div>
+        <div class="pageName">商户资产</div>
         <div class="profile"><myhead></myhead></div>
       </div>
       <div class="searchArea">
@@ -246,30 +246,19 @@ export default {
     //获取用户信息列表
     getMerchantAccountMes() {
       let url =
-        "/admin/api/agents/" +
-        this.$route.params.pathMatch.slice(21) +
+        "/admin/api/agents/type/3" +
         "/?token=" +
         this.token +
         "&page=" +
         this.pagenum +
         "&row=12";
-      this.$axios
-        .get(
-          "/admin/api/agents/" +
-            this.$route.params.pathMatch.slice(21) +
-            "/?token=" +
-            this.token +
-            "&page=" +
-            this.pagenum +
-            "&row=12"
-        )
-        .then(res => {
-          if (res.status == 200) {
-            console.log(res);
-            this.tableData = res.data.agentss || res.data.agents;
-            this.total = res.data.total || 0;
-          }
-        });
+      this.$axios.get(url).then(res => {
+        if (res.status == 200) {
+          console.log(res);
+          this.tableData = res.data.agentss || res.data.agents;
+          this.total = res.data.total || 0;
+        }
+      });
     },
     //监听页码值改变
     handleCurrentChange(newPage) {
