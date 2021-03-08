@@ -66,7 +66,7 @@
               </router-link>
             </el-menu-item>
             <el-menu-item index="4">
-              <router-link to="xiangqiCardmotoStation">
+              <router-link to="xiangqiCardmotoCharger">
                 <div class="menu-op">
                   <div>
                     <img src="../assets/images/sim.png" />
