@@ -115,11 +115,9 @@ export default {
   },
   created() {
     this.token = localStorage.getItem("token");
-
     this.stationsId = this.$store.state.id;
-    this.input = this.$store.state.name;
-    this.weiInput = this.$store.state.address;
-    this.text = this.$store.state.memo;
+    this.getStationMes();
+
     if (this.$store.state.type == 1) {
       this.typeInput = "汽车充电C";
     } else if (this.$store.state.type == 4) {
@@ -131,6 +129,17 @@ export default {
     }
   },
   methods: {
+    getStationMes() {
+      let toKen = this.token.replace(/\"/g, "");
+      let url = `/admin/api/station/${this.stationsId}?token=${toKen}`;
+      this.$axios.get(url).then(res => {
+        console.log("res.data.name");
+        console.log(res.data.station);
+        this.input = res.data.station.name;
+        this.weiInput = res.data.station.address;
+        this.text = res.data.station.memo;
+      });
+    },
     clear() {
       this.weiInput = "";
       this.text = "";
@@ -149,8 +158,7 @@ export default {
             return this.$message.error("修改失败!");
           }
           this.$message.success("修改成功!");
-          this.weiInput = "";
-          this.text = "";
+          this.getStationMes();
         });
     },
     leave2() {
