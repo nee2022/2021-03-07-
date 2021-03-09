@@ -6,7 +6,7 @@
           <span><img :src="loginConfig.imgs"/></span>
         </a>
       </div>
-      <a href="/#/merchantAsset/agent">
+      <a href="/#/merchantAsset/dataBoard">
         <div class="back">
           <img src="../../assets/images/left.png" />
         </div>
