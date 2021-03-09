@@ -645,7 +645,7 @@ export default {
         });
     },
     zhi() {
-      this.$axios.get(`/map/gd/chargers/1,2`).then(res => {
+      this.$axios.get(`/map/gd/chargers/3,4,19`).then(res => {
         this.maplist = res.data.chargers;
       });
     },

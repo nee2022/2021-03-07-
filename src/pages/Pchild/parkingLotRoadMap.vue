@@ -503,7 +503,7 @@ export default {
   created() {},
   methods: {
     zhi() {
-      this.$axios.get(`/map/gd/chargers/1,2`).then(res => {
+      this.$axios.get(`/map/gd/chargers/5,6`).then(res => {
         this.maplist = res.data.chargers;
       });
     },
