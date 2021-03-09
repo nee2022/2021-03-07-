@@ -532,12 +532,12 @@ export default {
         //图片样式
         var style = [];
         style[1] = {
-          url: require("../../assets/images/ACS.png"),
+          url: require("../../assets/images/mapIcon/DC.png"),
           anchor: new AMap.Pixel(4, 4),
           size: new AMap.Size(30, 37)
         };
         style[2] = {
-          url: require("../../assets/images/DCicon.png"),
+          url: require("../../assets/images/mapIcon/AC.png"),
           anchor: new AMap.Pixel(6, 6),
           size: new AMap.Size(30, 37)
         };

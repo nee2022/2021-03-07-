@@ -672,17 +672,17 @@ export default {
         //图片样式
         var style = [];
         style[3] = {
-          url: require("../../assets/images/ACS.png"),
+          url: require("../../assets/images/mapIcon/Motorbikes.png"),
           anchor: new AMap.Pixel(4, 4),
           size: new AMap.Size(30, 37)
         };
         style[4] = {
-          url: require("../../assets/images/DCicon.png"),
+          url: require("../../assets/images/mapIcon/Motorbikes.png"),
           anchor: new AMap.Pixel(6, 6),
           size: new AMap.Size(30, 37)
         };
         style[19] = {
-          url: require("../../assets/images/DCicon.png"),
+          url: require("../../assets/images/mapIcon/Motorbikes.png"),
           anchor: new AMap.Pixel(6, 6),
           size: new AMap.Size(30, 37)
         };

@@ -526,18 +526,18 @@ export default {
       }
     },
     gaode() {
-      this.$axios.get(`/map/gd/chargers/5,6`).then(res => {
+      this.$axios.get(`/map/gd/stations/5,6`).then(res => {
         this.maplist = res.data.chargers;
         console.log(this.maplist);
         //图片样式
         var style = [];
         style[5] = {
-          url: require("../../assets/images/ACS.png"),
+          url: require("../../assets/images/mapIcon/Imports.png"),
           anchor: new AMap.Pixel(4, 4),
           size: new AMap.Size(30, 37)
         };
         style[6] = {
-          url: require("../../assets/images/DCicon.png"),
+          url: require("../../assets/images/mapIcon/Exit.png"),
           anchor: new AMap.Pixel(6, 6),
           size: new AMap.Size(30, 37)
         };
