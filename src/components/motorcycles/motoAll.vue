@@ -270,7 +270,7 @@
     >
       <el-form
         :model="addForm"
-        :rules="addFormRules"
+        :rules="formRules"
         ref="addFormRef"
         label-width="80px"
       >
@@ -313,7 +313,7 @@
     >
       <el-form
         :model="editForm"
-        :rules="editFormRules"
+        :rules="formRules"
         ref="editFormRef"
         label-width="80px"
       >
@@ -359,7 +359,7 @@
     >
       <el-form
         :model="addForm1"
-        :rules="addFormRules1"
+        :rules="formRules"
         ref="addFormRef1"
         label-width="80px"
       >
@@ -390,7 +390,7 @@
     >
       <el-form
         :model="editForm1"
-        :rules="editFormRules1"
+        :rules="formRules"
         ref="editFormRef1"
         label-width="80px"
       >
@@ -527,54 +527,33 @@ export default {
         ]
       },
       //添加表单的验证规则
-      addFormRules: {
+      formRules: {
         dev_id: [
           {
             required: true,
-            message: "请输入正确的信息",
-            trigger: "blur"
-          },
-          {
-            min: 3,
-            max: 10,
-            message: "用户名的长度在3~10个字符之间",
+            message: "设备编号不能为空",
             trigger: "blur"
           }
         ],
         name: [
           {
             required: true,
-            message: "请输入正确的信息",
-            trigger: "blur"
-          },
-          {
-            min: 3,
-            max: 10,
-            message: "用户名的长度在3~10个字符之间",
+            message: "名称不能为空",
             trigger: "blur"
           }
         ],
         mac: [
           {
             required: true,
-            message: "请输入正确的信息",
-            trigger: "blur"
-          },
-          {
-            min: 3,
-            max: 10,
-            message: "用户名的长度在3~10个字符之间",
+            message: "机号不能为空",
             trigger: "blur"
           }
         ],
         address: [
           {
             required: true,
-            message: "地址",
+            message: "地址不能为空",
             trugger: "blur"
-          },
-          {
-            trigger: "blur"
           }
         ]
       },

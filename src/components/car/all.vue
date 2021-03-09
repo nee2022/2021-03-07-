@@ -190,7 +190,7 @@
 		</div>
 		<!-- 添加设备 -->
 		<el-dialog title="添加设备" :visible.sync="addDialogVisible" width="30%" @close="addDialogClosed">
-			<el-form :model="addForm" :rules="addFormRules" ref="addFormRef" label-width="80px">
+			<el-form :model="addForm" :rules=" formRules" ref="addFormRef" label-width="80px">
 				<el-form-item label="设备编号" prop="dev_id">
 					<el-input v-model="addForm.dev_id" class="addinput"></el-input>
 				</el-form-item>
@@ -208,7 +208,7 @@
 		</el-dialog>
 		<!-- 修改设备 -->
 		<el-dialog title="修改设备" :visible.sync="editDialogVisible" width="30%" @close="editDialogClosed">
-			<el-form :model="editForm" :rules="editFormRules" ref="editFormRef" label-width="80px">
+			<el-form :model="editForm" :rules="formRules" ref="editFormRef" label-width="80px">
 				<el-form-item label="设备编号" prop="dev_id">
 					<el-input v-model="editForm.dev_id" class="addinput"></el-input>
 				</el-form-item>
@@ -227,7 +227,7 @@
 		</el-dialog>
 		<!-- 添加设备 -->
 		<el-dialog title="添加设备" :visible.sync="addDialogVisible1" width="30%" @close="addDialogClosed1">
-			<el-form :model="addForm1" :rules="addFormRules1" ref="addFormRef1" label-width="80px">
+			<el-form :model="addForm1" :rules="formRules" ref="addFormRef1" label-width="80px">
 				<el-form-item label="站点名" prop="name">
 					<el-input v-model="addForm1.name" class="addinput"></el-input>
 				</el-form-item>
@@ -244,7 +244,7 @@
 		<!-- 添加站点 -->
 
 		<el-dialog title="修改设备" :visible.sync="addD" width="30%" @close="addDialogClosed1">
-			<el-form :rules="addFormRules1" ref="addFormRef1" label-width="80px">
+			<el-form :rules="formRules" ref="addFormRef1" label-width="80px">
 				<el-form-item label="站点名">
 					<el-input v-model="b" class="addinput"></el-input>
 				</el-form-item>
@@ -433,29 +433,36 @@
 						},
 					],
 				},
-				addFormRules1: {
-					name: [{
-							required: true,
-							message: "请输入用户名",
-							trigger: "blur",
-						},
-						{
-							min: 3,
-							max: 10,
-							message: "用户名的长度在3~10个字符之间",
-							trigger: "blur",
-						},
-					],
-					address: [{
-							required: true,
-							message: "地址",
-							trugger: "blur",
-						},
-						{
-							trigger: "blur",
-						},
-					],
-				},
+	   formRules: {
+        dev_id: [
+          {
+            required: true,
+            message: "设备编号不能为空",
+            trigger: "blur"
+          }
+        ],
+        name: [
+          {
+            required: true,
+            message: "名称不能为空",
+            trigger: "blur"
+          }
+        ],
+        mac: [
+          {
+            required: true,
+            message: "机号不能为空",
+            trigger: "blur"
+          }
+        ],
+        address: [
+          {
+            required: true,
+            message: "地址不能为空",
+            trugger: "blur"
+          }
+        ]
+      },	
 				options: [{
 						value: "选项1",
 						label: "直流桩",
