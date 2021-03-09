@@ -12,31 +12,14 @@
       <el-input
         class="in"
         prefix-icon="el-icon-search"
-        v-model="input"
+        v-model="searchInfo"
         placeholder="请输入内容"
       ></el-input>
     </div>
-    <!-- <div class="danxuan" >
-      <div>
-        <el-radio v-model="radio1" label="1" border>全部</el-radio>
-      </div>
-      <div>
-        <el-radio @click.native="zhi" v-model="radio1" label="2" border>直流装</el-radio>
-      </div>
-      <div>
-        <el-radio v-model="radio1" label="3" border>交流桩</el-radio>
-      </div>
-    </div> -->
     <div class="quans" v-show="flag"></div>
     <div class="qq" v-show="flag">
       <div class="spans">
-        <span
-          @click="dian(item.id)"
-          v-for="(item, i) in msg"
-          :key="i"
-          :class="{ blueWord: select == item.id }"
-          >{{ item.name }}</span
-        >
+        <span>基本信息</span>
         <div class="zzz">
           <img src="../../assets/images/electricity.png" alt="" />
           <img src="../../assets/images/signal.png" alt="" />
@@ -53,41 +36,56 @@
         <div class="zong_left">
           <div class="input">
             <span>名称</span>
-            <el-input placeholder="无" v-model="input1" :disabled="true">
+            <el-input
+              placeholder="无"
+              v-model="basicInfo.name"
+              :disabled="true"
+            >
             </el-input>
           </div>
           <div class="input">
             <span>类型</span>
-            <el-input placeholder="无" v-model="input2" :disabled="true">
+            <el-input
+              placeholder="无"
+              v-model="basicInfo.type"
+              :disabled="true"
+            >
             </el-input>
           </div>
           <div class="input">
             <span>机号</span>
-            <el-input placeholder="无" v-model="input3" :disabled="true">
+            <el-input placeholder="无" v-model="basicInfo.mac" :disabled="true">
             </el-input>
           </div>
           <div class="input">
             <span>端口数</span>
-            <el-input placeholder="无" v-model="input4" :disabled="true">
+            <el-input placeholder="无" v-model="basicInfo.num" :disabled="true">
             </el-input>
           </div>
           <div class="input">
             <span>站点</span>
-            <el-input placeholder="无" v-model="input5" :disabled="true">
+            <el-input
+              placeholder="无"
+              v-model="basicInfo.station"
+              :disabled="true"
+            >
             </el-input>
           </div>
           <div class="input">
             <span>地址</span>
-            <el-input placeholder="无" v-model="input6" :disabled="true">
+            <el-input
+              placeholder="无"
+              v-model="basicInfo.address"
+              :disabled="true"
+            >
             </el-input>
           </div>
         </div>
         <div class="zong_right">
           <div class="but">
-            <!-- <el-button v-if="shebeiMsg.online == true">设备在线</el-button> -->
-            <el-button @click="off">设备离线</el-button>
+            <el-button @click="deviceOffline">设备离线</el-button>
             <el-button
-              @click="restart"
+              @click="restartDevice"
               type="primary"
               style="background: #2971ff"
               >重启设备</el-button
@@ -96,8 +94,8 @@
           <div>
             <div class="jw">
               经纬度（
-              <span> {{ lng }}</span>
-              <span> {{ lat }}</span
+              <span> {{ currentPosition.lng }}</span>
+              <span> {{ currentPosition.lat }}</span
               >）
               <img
                 src="../../assets/images/compileg.png"
@@ -109,561 +107,44 @@
           <div id="containes"></div>
         </div>
       </div>
-      <!-- 充电状态-->
-      <div class="zong" v-show="select == 2">
-        <div class="chong_left test test-1">
-          <div class="scrollbar">
-            <el-scrollbar style="height: 100%">
-              <div
-                v-for="(item, id) in shebeiMsg.ports"
-                @click="change(item.port, id, item.state, item)"
-                :key="id"
-                class="quan"
-                :class="{ back: selectss == item.id }"
-              >
-                <span>{{ item.port }}</span>
-                <div class="es" v-if="item.state && item.state != '0'">
-                  <span class="wen">充电中</span>
-                </div>
-                <div class="es" v-else>
-                  <span class="wen">空闲</span>
-                </div>
-                <img
-                  class="immm"
-                  src="../../assets/images/smallIntng.png"
-                  alt=""
-                />
-              </div>
-            </el-scrollbar>
-          </div>
-        </div>
-        <!--充电中-->
-        <div class="zhuang" v-show="selectss > 0 && selectss < 20">
-          <div class="chong_zhong">
-            <div class="dian">
-              <div class="dian_d">
-                <div>
-                  <img src="../../assets/images/Inthecharging.png" alt="" />
-                </div>
-                <div class="wenzi">
-                  <span>充电中...</span>
-                  <div class="yuan">
-                    <span style="color: red">{{ "￥" + chong.amount }}</span>
-                    <span>{{ w }}</span>
-                  </div>
-                  <div class="jiner">
-                    <span>所属金额</span><span>已充电量</span>
-                  </div>
-                </div>
-              </div>
-              <div class="yaa">
-                <div class="ya">
-                  <div>{{ v }}</div>
-                  <div>电压</div>
-                </div>
-                <div class="ya">
-                  <div>{{ i }}</div>
-                  <div>电流</div>
-                </div>
-                <div class="ya">
-                  <div>{{ p }}</div>
-                  <div>功率</div>
-                </div>
-              </div>
-              <div class="buttt" @click="stop">
-                <el-button icon="el-icon-error" class="buts" type="primary"
-                  >停止充电</el-button
-                >
-              </div>
-            </div>
-          </div>
-          <div class="chong_right">
-            <div class="dingdan">
-              <div class="ding">
-                订单号：<span>{{ chong.dealno }}</span>
-              </div>
-              <div class="xia">
-                <div class="xia_i">
-                  <div>开始时间：</div>
-                  <span>{{ chong.start_time }} </span>
-                </div>
-                <div class="xia_i">
-                  <div>支付账号：</div>
-                  <span>43085093404</span>
-                </div>
-                <div class="xia_i">
-                  <div>卡号</div>
-                  <span>230948230</span>
-                </div>
-                <div class="xia_i">
-                  <div>充电方式</div>
-                  <span>{{ man }}</span>
-                </div>
-                <div class="xia_i">
-                  <div>充电金额</div>
-                  <span style="color: red">{{ "￥" + chong.amount }}</span>
-                </div>
-              </div>
-              <img class="imgss" src="../../assets/images/picture.png" alt="" />
-            </div>
-          </div>
-        </div>
-        <!--故障-->
-        <div class="zhuang zhu" v-show="selectss == 1">
-          <div class="cuowu">
-            <img src="../../assets/images/Thefault.png" alt="" />
-            <div>设备故障，请及时处理！</div>
-            <div>错误代码：678</div>
-          </div>
-        </div>
-        <!--空闲-->
-        <div class="zhuang zhu" v-show="selectss == 0">
-          <div class="cuowu2">
-            <img src="../../assets/images/free.png" alt="" />
-            <div>设备空闲中...</div>
-            <div class="bu2">
-              <div class="bu">
-                <img src="../../assets/images/Startcharging.png" alt="" />
-                <span @click="start">启动充电</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!--已完成-->
-        <div class="zhuang zhu" v-show="selectss == 4">
-          <div class="cuowu2">
-            <img src="../../assets/images/completed.png" alt="" />
-            <div>充电已完成，请及时移除...</div>
-            <div class="bu2">
-              <div class="bu">
-                <img src="../../assets/images/Startcharging.png" alt="" />
-                <span>启动充电</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- 经纬度修改对话框 -->
-
-      <!-- <div class="zong las" v-show="select == 3">
-        <div class="lazha">
-          <span> 拉闸</span>
-          <span style="color: red">（再次点击开关实现合闸）</span>
-          <el-switch v-model="value" active-color="#1E69FE"> </el-switch>
-        </div>
-        <div class="zhuangt">
-          <div class="zhuangt_left">
-            <div class="wai">
-              <div class="li">
-                <div class="li_l">
-                  <span>实时电量</span>
-                  <div>
-                    <span
-                      style="font-size: 45px; color: #54a75c; font-weight: 400"
-                      >12,345</span
-                    >
-                    <span>KWH</span>
-                  </div>
-                </div>
-                <div class="fen">
-                  <div>
-                    <span>温度</span><span class="yan">123</span><span>°C</span>
-                  </div>
-                  <div>
-                    <span>零线电流</span><span class="yan">1</span
-                    ><span>A</span>
-                  </div>
-                </div>
-              </div>
-              <div class="yus">
-                <span class="yu"></span>
-                <span class="yu"></span>
-                <span class="yu"></span>
-              </div>
-            </div>
-          </div>
-          <div class="zhuangt_fight">
-            <div class="list">
-              <div class="list_span">
-                <span>电相</span><span>电压/V</span><span>电流/A</span
-                ><span>功率/W</span><span>电量/kwh</span>
-              </div>
-              <div class="list_span">
-                <span>A相</span><span>1</span><span>2</span><span>9405</span
-                ><span>930485</span>
-              </div>
-              <div class="list_span">
-                <span>B相</span><span>120</span><span>33</span
-                ><span>023810</span><span>2930284</span>
-              </div>
-              <div class="list_span">
-                <span>C相</span><span>02483</span><span>4594</span
-                ><span>98343</span><span>98308</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="zong lass" v-show="select == 7">
-        <div>85105</div>
-        <div>
-          <img src="../../assets/images/heiding.png" alt="" />
-          <span>{{ stadion }}</span>
-        </div>
-        <div class="fe">
-          <div></div>
-          <div class="fe_ee">
-            <span class="yuan_2"></span>
-            <span>85105</span>
-          </div>
-          <div></div>
-        </div>
-        <div class="jian">
-          <img src="../../assets/images/arrow.png" alt="" />
-        </div>
-        <div class="foot">取证中...</div>
-      </div> -->
-      <!-- <div class="zong lasa" v-show="select == 4">
-        <div class="lasa_left">
-          <img src="../../assets/images/tomgce.png" alt="" />
-        </div>
-        <div class="lasa_right">
-          <div class="lasa_right_top">
-            <span>85105</span>
-            <div>结费</div>
-          </div>
-          <div class="lasa_right_zhong">
-            <div class="zhong_wai">
-              <div class="zhong_li">
-                <div class="zhong_ll">A·F026</div>
-              </div>
-            </div>
-            <div class="zhong_i">
-              <div class="zhong_i_left">
-                <div class="ddd">2:48:35</div>
-                <div class="sss">2020-11-11 14:25</div>
-              </div>
-              <div class="zhong_i_right">
-                <div class="dds">
-                  <div class="ddd">￥40</div>
-                  <img src="../../assets/images/imggg.png" alt="" />
-                </div>
-                <div class="sss">应收金额</div>
-              </div>
-            </div>
-          </div>
-          <div class="lasa_right_bottum" id="ies"></div>
-          <div class="foot_map">
-            <img src="../../assets/images/heiding.png" alt="" />
-            <div>浙江省杭州市江干区金沙湖大道与银沙路交汇处</div>
-          </div>
-        </div>
-      </div>
-      <div class="zong lass" v-show="select == 5">
-        <div>85105</div>
-        <div>
-          <img src="../../assets/images/heiding.png" alt="" />
-          <span>杭州市江干区金沙湖大道与银沙路交汇处</span>
-        </div>
-        <div class="jian">
-          <img
-            class="carzhuang"
-            src="../../assets/images/zhuangcar.png"
-            alt=""
-          />
-        </div>
-        <div class="fe">
-          <div></div>
-          <div class="fe_ee">
-            <img class="tucar" src="../../assets/images/dicar.png" alt="" />
-            <span class="yuan_2"></span>
-            <span>85105</span>
-          </div>
-          <div></div>
-        </div>
-        <div class="jian">
-          <img src="../../assets/images/arrow.png" alt="" />
-        </div>
-        <div class="foot">取证中...</div>
-      </div>
-      <div class="zong lasa" v-show="select == 6">
-        <div class="lasa_left">
-          <img src="../../assets/images/tomgce.png" alt="" />
-        </div>
-        <div class="lasa_right">
-          <div class="">
-            <div style="font-size: 24px; color: #76746f; text-align: center">
-              车辆驶出中...
-            </div>
-            <div class="you">
-              <span>A2出口</span>
-              <div class="tai">抬杆</div>
-            </div>
-          </div>
-          <div class="lasa_right_zhong">
-            <div class="zhong_wai">
-              <div class="zhong_li">
-                <div class="zhong_ll">A·F026</div>
-              </div>
-            </div>
-            <div class="zhong_i">
-              <div class="zhong_i_left">
-                <div class="ddd">2:48:35</div>
-                <div class="sss">2020-11-11 14:25</div>
-              </div>
-              <div class="zhong_i_right">
-                <div class="dds">
-                  <div class="ddd">￥40</div>
-                  <img src="../../assets/images/imggg.png" alt="" />
-                </div>
-                <div class="sss">应收金额</div>
-              </div>
-            </div>
-          </div>
-          <div class="lasa_right_bottum" id="iess"></div>
-          <div class="foot_map">
-            <img src="../../assets/images/heiding.png" alt="" />
-            <div>浙江省杭州市江干区金沙湖大道与银沙路交汇处</div>
-          </div>
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
 
 <script>
 import myhead from "../../components/myhead";
-import axios from "axios";
-import shebeiBasicVue from "../shebeiXinxi/shebeiBasic.vue";
 export default {
   components: {
     myhead
   },
   data() {
     return {
-      man: "",
-      v: null,
-      p: null,
-      i: null,
-      w: null,
-      chong: [],
-      state: 0,
-      ports: 1,
-      map: "",
-      radio1: "1",
-      value: false,
-      index: "0",
-      leftList: [
-        {
-          id: 1,
-          name: "故障"
-        },
-        {
-          id: 2,
-          name: "空闲"
-        },
-        {
-          id: 3,
-          name: "充电中"
-        },
-        {
-          id: 4,
-          name: "充电已完成"
-        },
-        {
-          id: 5,
-          name: "充电中"
-        },
-        {
-          id: 7,
-          name: "充电中"
-        },
-        {
-          id: 8,
-          name: "充电中"
-        },
-        {
-          id: 9,
-          name: "充电中"
-        },
-        {
-          id: 10,
-          name: "充电中"
-        }
-      ],
-      msg: [
-        {
-          id: 1,
-          name: "基本信息"
-        },
-        {
-          id: 2,
-          name: "充电状态"
-        }
-        // {
-        //   id: 3,
-        //   name: "电表状态",
-        // },
-        // {
-        //   id: 7,
-        //   name: "地磁",
-        // },
-        // {
-        //   id: 4,
-        //   name: "低视频桩",
-        // },
-        // {
-        //   id: 5,
-        //   name: "高视频桩",
-        // },
-        // {
-        //   id: 6,
-        //   name: "停车场",
-        // },
-      ],
-      input: "",
+      currentPosition: {
+        lng: "",
+        lat: ""
+      },
+      searchInfo: "",
       maplist: [],
       flag: false,
-      input1: "",
-      input2: "",
-      input3: "",
-      input4: "",
-      input5: "",
-      input6: "",
+      basicInfo: {
+        name: "",
+        type: "",
+        mac: "",
+        num: "",
+        station: "",
+        address: ""
+      },
       select: 1,
-      selectss: 0,
-      token: JSON.parse(localStorage.getItem("token")),
-      shebeiMsg: [],
-      eMsg: [],
-      lng: 1,
-      lat: 1,
-      stadion: "",
-      id: "",
-      time: null
+      token: JSON.parse(localStorage.getItem("token"))
     };
   },
   created() {},
-  watch: {
-    selectss: function(newW, oldV) {
-      this.selectss = newW;
-    }
-  },
   methods: {
-    xxx() {
-      console.log("xxx");
-    },
-    web() {
-      this.$axios
-        .get(
-          `/admin/api/charger/${this.id}?token=${this.token}&attach=state,ports,pdr`
-        )
-        .then(res => {
-          this.shebeiMsg = res.data.charger;
-        });
-    },
-    stop() {
-      clearInterval(this.time);
-      this.$axios
-        .delete(
-          `admin/api/charger/${this.id}/${this.ports}/session?token=${this.token}`
-        )
-        .then(res => {});
-    },
-    all() {
-      this.$axios
-        .get(
-          `/admin/api/charger/${this.id}?token=${this.token}&attach=state,ports,pdr`
-        )
-        .then(res => {
-          this.shebeiMsg = res.data.charger;
-        });
-    },
-    start() {
-      clearInterval(this.time);
-      this.$axios
-        .post(`admin/api/charger/${this.id}/${this.ports}/session`, {
-          token: this.token,
-          type: 3,
-          duration: 1
-        })
-        .then(res => {
-          this.$set(this.shebeiMsg.ports[this.index], "state", 3);
-          this.selectss = 3;
-
-          this.web();
-          this.time = setInterval(() => {
-            this.web();
-          }, 36000);
-        });
-      if ((this.shebeiMsg.ports[this.index].state = 0)) {
-        clearInterval(this.time);
-      }
-      this.chong = this.shebeiMsg.ports[this.index];
-      if (this.shebeiMsg.ports[this.index].charge_type == 1) {
-        this.man = "自动充满";
-      } else if (this.shebeiMsg.ports[this.index].charge_type == 2) {
-        this.man = "按金额";
-      } else {
-        this.man = "按时间";
-      }
-      this.v = parseInt(this.shebeiMsg.ports[this.index].v) + "V";
-      this.p = parseInt(this.shebeiMsg.ports[this.index].p) + "W";
-      this.i = Math.ceil(this.shebeiMsg.ports[this.index].i) + "A";
-      this.w = this.shebeiMsg.ports[this.index].soc + "%";
-    },
-    change(id, i, state, item) {
-      this.index = i;
-      this.ports = id;
-      this.selectss = state;
-    },
-    off() {
-      this.$axios
-        .put(`/admin/api/charger/${this.id}?token=${this.token}`, {
-          enabled: false
-        })
-        .then(res => {
-          if (res.status == 200) {
-            this.$message.success("离线成功");
-            //刷新用户数据
-          } else {
-            this.$message.error("离线失败");
-          }
-        });
-    },
-    restart() {
-      this.$axios
-        .put(`/admin/api/charger/${this.id}?token=${this.token}`, {
-          enabled: true
-        })
-        .then(res => {
-          if (res.status == 200) {
-            this.$message.success("重启成功");
-            //刷新用户数据
-          } else {
-            this.$message.error("重启失败");
-          }
-        });
-    },
+    restartDevice() {},
+    xxx() {},
+    deviceOffline() {},
     close() {
       this.flag = false;
-    },
-
-    dian(id) {
-      this.all();
-      this.select = id;
-      if (this.select == 4) {
-        var map = new AMap.Map("ies", {
-          zoom: 14,
-          center: [120.29119, 30.43048],
-          resizeEnable: true
-        });
-      } else if (this.select == 6) {
-        var map = new AMap.Map("iess", {
-          zoom: 14,
-          center: [120.29119, 30.43048],
-          resizeEnable: true
-        });
-      }
     },
     gaode() {
       this.$axios.get(`/map/gd/chargers/3,4,19`).then(res => {
@@ -693,68 +174,23 @@ export default {
           cursor: "pointer",
           style: style
         });
-        let _this = this;
 
+        let _this = this;
         var marker = new AMap.Marker({
           content: " ",
           map: _this.map
         });
-        mass.on("mouseover", function(e) {
+        mass.on("mouseover", e => {
           marker.setPosition(e.data.lnglat);
           marker.setLabel({
             content: e.data.name
           });
         });
         //点击mark弹窗
-        mass.on("click", function(e) {
-          _this.eMsg = e.data;
-          _this.id = e.data.id;
-          _this.lng = _this.eMsg.lnglat.lng;
-          _this.lat = _this.eMsg.lnglat.lat;
-          _this.flag = !_this.flag;
-
-          AMap.plugin("AMap.Geocoder", function() {
-            var geocoder = new AMap.Geocoder({
-              // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
-              city: "010"
-            });
-
-            var lnglat = [_this.lng, _this.lat];
-
-            geocoder.getAddress(lnglat, function(status, result) {
-              if (status === "complete" && result.info === "OK") {
-                _this.stadion = result.regeocode.formattedAddress;
-              }
-            });
-          });
-          var map = new AMap.Map("containes", {
-            zoom: 14,
-            center: [_this.lng, _this.lat],
-            resizeEnable: true
-          });
-          var marker = new AMap.Marker({
-            position: new AMap.LngLat(_this.lng, _this.lat),
-            icon: require("../../assets/images/hongding.png")
-          });
-          map.add(marker);
-
-          axios
-            .get(
-              `/admin/api/charger/${e.data.id}?token=${_this.token}&attach=state,ports,pdr`
-            )
-            .then(res => {
-              _this.shebeiMsg = res.data.charger;
-              if (_this.shebeiMsg.type === 1) {
-                _this.input2 = "直流桩";
-              } else {
-                _this.input2 = "交流桩";
-              }
-              _this.input1 = _this.shebeiMsg.name;
-              _this.input3 = _this.shebeiMsg.mac;
-              _this.input4 = _this.shebeiMsg.port;
-              _this.input5 = _this.shebeiMsg.station;
-              _this.input6 = _this.shebeiMsg.address;
-            });
+        mass.on("click", e => {
+          console.log("flag");
+          console.log(this.flag);
+          this.flag = true;
         });
 
         mass.setMap(_this.map);
@@ -776,7 +212,6 @@ export default {
       center: [102.342785, 35.312316],
       resizeEnable: true
     });
-    // this.web();
     this.gaode();
   }
 };
