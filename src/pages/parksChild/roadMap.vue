@@ -526,34 +526,13 @@ export default {
       }
     },
     gaode() {
-      this.$axios.get(`/map/gd/stations/7,10,11,17,18`).then(res => {
-        this.maplist = res.data.chargers;
-        console.log(this.maplist);
+      this.$axios.get(`/map/gd/stations/3`).then(res => {
+        this.maplist = res.data.stations;
         //图片样式
         var style = [];
-        style[7] = {
-          url: require("../../assets/images/mapIcon/Geomagnetism.png"),
+        style[3] = {
+          url: require("../../assets/images/mapIcon/road.png"),
           anchor: new AMap.Pixel(4, 4),
-          size: new AMap.Size(30, 37)
-        };
-        style[10] = {
-          url: require("../../assets/images/mapIcon/Highscreenstake.png"),
-          anchor: new AMap.Pixel(6, 6),
-          size: new AMap.Size(30, 37)
-        };
-        style[11] = {
-          url: require("../../assets/images/mapIcon/Lowscreenstake.png"),
-          anchor: new AMap.Pixel(6, 6),
-          size: new AMap.Size(30, 37)
-        };
-        style[17] = {
-          url: require("../../assets/images/mapIcon/pos.png"),
-          anchor: new AMap.Pixel(6, 6),
-          size: new AMap.Size(30, 37)
-        };
-        style[18] = {
-          url: require("../../assets/images/mapIcon/Patrolmachine.png"),
-          anchor: new AMap.Pixel(6, 6),
           size: new AMap.Size(30, 37)
         };
         //创建mark

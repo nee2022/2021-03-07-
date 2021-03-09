@@ -526,19 +526,13 @@ export default {
       }
     },
     gaode() {
-      this.$axios.get(`/map/gd/stations/5,6`).then(res => {
-        this.maplist = res.data.chargers;
-        console.log(this.maplist);
+      this.$axios.get(`/map/gd/stations/2`).then(res => {
+        this.maplist = res.data.stations;
         //图片样式
         var style = [];
-        style[5] = {
-          url: require("../../assets/images/mapIcon/Imports.png"),
+        style[2] = {
+          url: require("../../assets/images/mapIcon/parkingLot.png"),
           anchor: new AMap.Pixel(4, 4),
-          size: new AMap.Size(30, 37)
-        };
-        style[6] = {
-          url: require("../../assets/images/mapIcon/Exit.png"),
-          anchor: new AMap.Pixel(6, 6),
           size: new AMap.Size(30, 37)
         };
         //创建mark
