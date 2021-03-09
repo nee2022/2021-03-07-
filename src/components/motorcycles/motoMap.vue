@@ -644,11 +644,6 @@ export default {
           }
         });
     },
-    zhi() {
-      this.$axios.get(`/map/gd/chargers/3,4,19`).then(res => {
-        this.maplist = res.data.chargers;
-      });
-    },
     close() {
       this.flag = false;
     },
@@ -671,21 +666,26 @@ export default {
       }
     },
     gaode() {
-      this.$axios.get(`/map/gd/chargers/3,4`).then(res => {
+      this.$axios.get(`/map/gd/chargers/3,4,19`).then(res => {
         this.maplist = res.data.chargers;
         //图片样式
-        var style = [
-          {
-            url: require("../../assets/images/diandanche.png"),
-            anchor: new AMap.Pixel(4, 4),
-            size: new AMap.Size(30, 37)
-          },
-          {
-            url: require("../../assets/images/diandanche.png"),
-            anchor: new AMap.Pixel(6, 6),
-            size: new AMap.Size(30, 37)
-          }
-        ];
+        //图片样式
+        var style = [];
+        style[3] = {
+          url: require("../../assets/images/ACS.png"),
+          anchor: new AMap.Pixel(4, 4),
+          size: new AMap.Size(30, 37)
+        };
+        style[4] = {
+          url: require("../../assets/images/DCicon.png"),
+          anchor: new AMap.Pixel(6, 6),
+          size: new AMap.Size(30, 37)
+        };
+        style[19] = {
+          url: require("../../assets/images/DCicon.png"),
+          anchor: new AMap.Pixel(6, 6),
+          size: new AMap.Size(30, 37)
+        };
         //创建mark
         var mass = new AMap.MassMarks(this.maplist, {
           opacity: 0.8,
@@ -706,56 +706,56 @@ export default {
           });
         });
         //点击mark弹窗
-        mass.on("click", function(e) {
-          _this.eMsg = e.data;
-          _this.id = e.data.id;
-          _this.lng = _this.eMsg.lnglat.lng;
-          _this.lat = _this.eMsg.lnglat.lat;
-          _this.flag = !_this.flag;
+        // mass.on("click", function(e) {
+        //   _this.eMsg = e.data;
+        //   _this.id = e.data.id;
+        //   _this.lng = _this.eMsg.lnglat.lng;
+        //   _this.lat = _this.eMsg.lnglat.lat;
+        //   _this.flag = !_this.flag;
 
-          AMap.plugin("AMap.Geocoder", function() {
-            var geocoder = new AMap.Geocoder({
-              // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
-              city: "010"
-            });
+        //   AMap.plugin("AMap.Geocoder", function() {
+        //     var geocoder = new AMap.Geocoder({
+        //       // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
+        //       city: "010"
+        //     });
 
-            var lnglat = [_this.lng, _this.lat];
+        //     var lnglat = [_this.lng, _this.lat];
 
-            geocoder.getAddress(lnglat, function(status, result) {
-              if (status === "complete" && result.info === "OK") {
-                _this.stadion = result.regeocode.formattedAddress;
-              }
-            });
-          });
-          var map = new AMap.Map("containes", {
-            zoom: 14,
-            center: [_this.lng, _this.lat],
-            resizeEnable: true
-          });
-          var marker = new AMap.Marker({
-            position: new AMap.LngLat(_this.lng, _this.lat),
-            icon: require("../../assets/images/hongding.png")
-          });
-          map.add(marker);
+        //     geocoder.getAddress(lnglat, function(status, result) {
+        //       if (status === "complete" && result.info === "OK") {
+        //         _this.stadion = result.regeocode.formattedAddress;
+        //       }
+        //     });
+        //   });
+        //   var map = new AMap.Map("containes", {
+        //     zoom: 14,
+        //     center: [_this.lng, _this.lat],
+        //     resizeEnable: true
+        //   });
+        //   var marker = new AMap.Marker({
+        //     position: new AMap.LngLat(_this.lng, _this.lat),
+        //     icon: require("../../assets/images/hongding.png")
+        //   });
+        //   map.add(marker);
 
-          axios
-            .get(
-              `/admin/api/charger/${e.data.id}?token=${_this.token}&attach=state,ports,pdr`
-            )
-            .then(res => {
-              _this.shebeiMsg = res.data.charger;
-              if (_this.shebeiMsg.type === 1) {
-                _this.input2 = "直流桩";
-              } else {
-                _this.input2 = "交流桩";
-              }
-              _this.input1 = _this.shebeiMsg.name;
-              _this.input3 = _this.shebeiMsg.mac;
-              _this.input4 = _this.shebeiMsg.port;
-              _this.input5 = _this.shebeiMsg.station;
-              _this.input6 = _this.shebeiMsg.address;
-            });
-        });
+        //   axios
+        //     .get(
+        //       `/admin/api/charger/${e.data.id}?token=${_this.token}&attach=state,ports,pdr`
+        //     )
+        //     .then(res => {
+        //       _this.shebeiMsg = res.data.charger;
+        //       if (_this.shebeiMsg.type === 1) {
+        //         _this.input2 = "直流桩";
+        //       } else {
+        //         _this.input2 = "交流桩";
+        //       }
+        //       _this.input1 = _this.shebeiMsg.name;
+        //       _this.input3 = _this.shebeiMsg.mac;
+        //       _this.input4 = _this.shebeiMsg.port;
+        //       _this.input5 = _this.shebeiMsg.station;
+        //       _this.input6 = _this.shebeiMsg.address;
+        //     });
+        // });
 
         mass.setMap(_this.map);
         //判断

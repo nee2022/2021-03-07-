@@ -502,11 +502,6 @@ export default {
   },
   created() {},
   methods: {
-    zhi() {
-      this.$axios.get(`/map/gd/chargers/5,6`).then(res => {
-        this.maplist = res.data.chargers;
-      });
-    },
     close() {
       this.flag = false;
     },
@@ -531,22 +526,21 @@ export default {
       }
     },
     gaode() {
-      this.$axios.get(`/map/gd/chargers/1,2`).then(res => {
+      this.$axios.get(`/map/gd/chargers/5,6`).then(res => {
         this.maplist = res.data.chargers;
         console.log(this.maplist);
         //图片样式
-        var style = [
-          {
-            url: require("../../assets/images/ACS.png"),
-            anchor: new AMap.Pixel(4, 4),
-            size: new AMap.Size(30, 37)
-          },
-          {
-            url: require("../../assets/images/DCicon.png"),
-            anchor: new AMap.Pixel(6, 6),
-            size: new AMap.Size(30, 37)
-          }
-        ];
+        var style = [];
+        style[5] = {
+          url: require("../../assets/images/ACS.png"),
+          anchor: new AMap.Pixel(4, 4),
+          size: new AMap.Size(30, 37)
+        };
+        style[6] = {
+          url: require("../../assets/images/DCicon.png"),
+          anchor: new AMap.Pixel(6, 6),
+          size: new AMap.Size(30, 37)
+        };
         //创建mark
         var mass = new AMap.MassMarks(this.maplist, {
           opacity: 0.8,
@@ -567,59 +561,59 @@ export default {
           });
         });
         //点击mark弹窗
-        mass.on("click", function(e) {
-          _this.eMsg = e.data;
-          _this.lng = _this.eMsg.lnglat.lng;
-          _this.lat = _this.eMsg.lnglat.lat;
-          _this.flag = !_this.flag;
+        // mass.on("click", function(e) {
+        //   _this.eMsg = e.data;
+        //   _this.lng = _this.eMsg.lnglat.lng;
+        //   _this.lat = _this.eMsg.lnglat.lat;
+        //   _this.flag = !_this.flag;
 
-          AMap.plugin("AMap.Geocoder", function() {
-            var geocoder = new AMap.Geocoder({
-              // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
-              city: "010"
-            });
+        //   AMap.plugin("AMap.Geocoder", function() {
+        //     var geocoder = new AMap.Geocoder({
+        //       // city 指定进行编码查询的城市，支持传入城市名、adcode 和 citycode
+        //       city: "010"
+        //     });
 
-            var lnglat = [_this.lng, _this.lat];
+        //     var lnglat = [_this.lng, _this.lat];
 
-            geocoder.getAddress(lnglat, function(status, result) {
-              if (status === "complete" && result.info === "OK") {
-                _this.stadion = result.regeocode.formattedAddress;
-              }
-            });
-          });
-          var map = new AMap.Map("containes", {
-            zoom: 14,
-            center: [_this.lng, _this.lat],
-            resizeEnable: true
-          });
-          var marker = new AMap.Marker({
-            position: new AMap.LngLat(_this.lng, _this.lat),
-            icon: require("../../assets/images/hongding.png")
-          });
-          map.add(marker);
+        //     geocoder.getAddress(lnglat, function(status, result) {
+        //       if (status === "complete" && result.info === "OK") {
+        //         _this.stadion = result.regeocode.formattedAddress;
+        //       }
+        //     });
+        //   });
+        //   var map = new AMap.Map("containes", {
+        //     zoom: 14,
+        //     center: [_this.lng, _this.lat],
+        //     resizeEnable: true
+        //   });
+        //   var marker = new AMap.Marker({
+        //     position: new AMap.LngLat(_this.lng, _this.lat),
+        //     icon: require("../../assets/images/hongding.png")
+        //   });
+        //   map.add(marker);
 
-          console.log(e);
+        //   console.log(e);
 
-          console.log(_this.eMsg.lnglat.lng);
-          axios
-            .get(`/admin/api/charger/${e.data.id}?token=${_this.token}`)
-            .then(res => {
-              _this.shebeiMsg = res.data.charger;
-              console.log(_this.shebeiMsg);
-              if (_this.shebeiMsg.type === 1) {
-                console.log(1);
-                _this.input2 = "直流桩";
-              } else {
-                _this.input2 = "交流桩";
-                console.log(2);
-              }
-              _this.input1 = _this.shebeiMsg.name;
-              _this.input3 = _this.shebeiMsg.mac;
-              _this.input4 = _this.shebeiMsg.port;
-              _this.input5 = _this.shebeiMsg.station;
-              _this.input6 = _this.shebeiMsg.address;
-            });
-        });
+        //   console.log(_this.eMsg.lnglat.lng);
+        //   axios
+        //     .get(`/admin/api/charger/${e.data.id}?token=${_this.token}`)
+        //     .then(res => {
+        //       _this.shebeiMsg = res.data.charger;
+        //       console.log(_this.shebeiMsg);
+        //       if (_this.shebeiMsg.type === 1) {
+        //         console.log(1);
+        //         _this.input2 = "直流桩";
+        //       } else {
+        //         _this.input2 = "交流桩";
+        //         console.log(2);
+        //       }
+        //       _this.input1 = _this.shebeiMsg.name;
+        //       _this.input3 = _this.shebeiMsg.mac;
+        //       _this.input4 = _this.shebeiMsg.port;
+        //       _this.input5 = _this.shebeiMsg.station;
+        //       _this.input6 = _this.shebeiMsg.address;
+        //     });
+        // });
 
         mass.setMap(_this.map);
         //判断
