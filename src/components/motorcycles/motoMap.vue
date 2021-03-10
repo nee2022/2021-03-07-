@@ -59,7 +59,7 @@
           </div>
           <div class="input">
             <span>端口数</span>
-            <el-input placeholder="无" v-model="basicInfo.num" :disabled="true">
+            <el-input placeholder="无" v-model="basicInfo.gun" :disabled="true">
             </el-input>
           </div>
           <div class="input">
@@ -94,8 +94,8 @@
           <div>
             <div class="jw">
               经纬度（
-              <span> {{ currentPosition.lng }}</span>
-              <span> {{ currentPosition.lat }}</span
+              <span> {{ basicInfo.longitude }}</span>
+              <span> {{ basicInfo.latitude }}</span
               >）
               <img
                 src="../../assets/images/compileg.png"
@@ -119,10 +119,6 @@ export default {
   },
   data() {
     return {
-      currentPosition: {
-        lng: "",
-        lat: ""
-      },
       searchInfo: "",
       maplist: [],
       flag: false,
@@ -130,9 +126,13 @@ export default {
         name: "",
         type: "",
         mac: "",
-        num: "",
+        gun: "",
         station: "",
-        address: ""
+        address: "",
+        enabled: "",
+        online: "",
+        longitude: "",
+        latitude: ""
       },
       select: 1,
       token: JSON.parse(localStorage.getItem("token"))
@@ -149,6 +149,8 @@ export default {
     gaode() {
       this.$axios.get(`/map/gd/chargers/3,4,19`).then(res => {
         this.maplist = res.data.chargers;
+        // console.log("this.maplist");
+        // console.log(this.maplist);
         //图片样式
         //图片样式
         var style = [];
@@ -188,9 +190,28 @@ export default {
         });
         //点击mark弹窗
         mass.on("click", e => {
-          console.log("flag");
-          console.log(this.flag);
-          this.flag = true;
+          let deviceInfoUrl = `/admin/api/charger/${e.data.id}/?token=${this.token}`;
+          this.$axios.get(deviceInfoUrl).then(res => {
+            console.log("res.data");
+            console.log(res.data);
+            // 返回数据为“设备不存在”的判断
+            if (res.data.error === 1793) {
+              alert("设备不存在");
+              return;
+            }
+            // 设备存在时，弹出框显示设备信息
+            this.flag = true;
+            this.basicInfo.name = res.data.charger.name;
+            this.basicInfo.mac = res.data.charger.mac;
+            this.basicInfo.type = res.data.charger.type;
+            this.basicInfo.gun = res.data.charger.gun;
+            this.basicInfo.address = res.data.charger.address;
+            this.basicInfo.station = res.data.charger.station;
+            this.basicInfo.enabled = res.data.charger.enabled;
+            this.basicInfo.online = res.data.charger.online;
+            this.basicInfo.longitude = res.data.charger.longitude;
+            this.basicInfo.latitude = res.data.charger.latitude;
+          });
         });
 
         mass.setMap(_this.map);
