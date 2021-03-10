@@ -272,11 +272,12 @@ export default {
   },
   data() {
     return {
+      port_free: [],
+      port_work: [],
       leftList: [
         { name: "设备故障", id: 1 },
         { name: "设备空闲", id: 2 },
-        { name: "正在充电", id: 3 },
-        { name: "充电完成", id: 4 }
+        { name: "正在充电", id: 3 }
       ],
       selectss: 2,
       msg: [
@@ -312,10 +313,27 @@ export default {
     change(id) {
       this.selectss = id;
     },
+    generateFreeAndWorkPort(id) {
+      if (id === 2) {
+        console.log("id");
+        console.log(id);
+        if (!this.basicInfo.ports) {
+          return;
+        }
+        for (let i = 0; i < this.basicInfo.ports.length; i++) {
+          console.log("this.basicInfo.ports[i]");
+          console.log(this.basicInfo.ports[i]);
+          if (this.basicInfo.ports[i].state === 0) {
+            this.port_free.push(this.basicInfo.ports[i]);
+            return;
+          }
+          this.port_work.push(this.basicInfo.ports[i]);
+        }
+      }
+    },
     dian(id) {
-      console.log("this.basicInfo.ports");
-      console.log(this.basicInfo.ports);
       this.select = id;
+      this.generateFreeAndWorkPort(id);
       if (this.basicInfo.ports[0].error) {
         console.log(this.basicInfo.ports[0].error);
         this.selectss = 1;
