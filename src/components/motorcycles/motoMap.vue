@@ -63,6 +63,15 @@
             </el-input>
           </div>
           <div class="input">
+            <span>状态</span>
+            <el-input
+              placeholder="无"
+              v-model="basicInfo.online"
+              :disabled="true"
+            >
+            </el-input>
+          </div>
+          <div class="input">
             <span>站点</span>
             <el-input
               placeholder="无"
@@ -208,9 +217,11 @@ export default {
             this.basicInfo.address = res.data.charger.address;
             this.basicInfo.station = res.data.charger.station;
             this.basicInfo.enabled = res.data.charger.enabled;
-            this.basicInfo.online = res.data.charger.online;
             this.basicInfo.longitude = res.data.charger.longitude;
             this.basicInfo.latitude = res.data.charger.latitude;
+            res.data.charger.online
+              ? (this.basicInfo.online = "在线")
+              : (this.basicInfo.online = "离线");
           });
         });
 
@@ -1020,7 +1031,7 @@ export default {
 
 .input {
   width: 100%;
-  margin: 0px 30px 33px 31px;
+  margin: 0px 30px 22px 31px;
 }
 
 .spans img {
