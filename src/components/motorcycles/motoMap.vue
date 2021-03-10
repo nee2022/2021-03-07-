@@ -21,9 +21,9 @@
       <div class="spans">
         <span>基本信息</span>
         <div class="zzz">
-          <img src="../../assets/images/electricity.png" alt="" />
-          <img src="../../assets/images/signal.png" alt="" />
-          <img src="../../assets/images/delete22.png" alt="" />
+          <!-- <img src="../../assets/images/electricity.png" alt="" /> -->
+          <!-- <img src="../../assets/images/signal.png" alt="" /> -->
+          <!-- <img src="../../assets/images/delete22.png" alt="" /> -->
           <img
             @click="close"
             class="shangtu"
@@ -63,15 +63,6 @@
             </el-input>
           </div>
           <div class="input">
-            <span>状态</span>
-            <el-input
-              placeholder="无"
-              v-model="basicInfo.online"
-              :disabled="true"
-            >
-            </el-input>
-          </div>
-          <div class="input">
             <span>站点</span>
             <el-input
               placeholder="无"
@@ -92,11 +83,12 @@
         </div>
         <div class="zong_right">
           <div class="but">
-            <el-button @click="deviceOffline">设备离线</el-button>
+            <el-button>{{ basicInfo.online }}</el-button>
             <el-button
               @click="restartDevice"
               type="primary"
-              style="background: #2971ff"
+              style="background: #f5f7fa;color:#c1c4cb;border-color:#f5f7fa;"
+              disabled
               >重启设备</el-button
             >
           </div>
@@ -104,12 +96,13 @@
             <div class="jw">
               经纬度（
               <span> {{ basicInfo.longitude }}</span>
+              <span>，</span>
               <span> {{ basicInfo.latitude }}</span
               >）
               <img
                 src="../../assets/images/compileg.png"
                 alt=""
-                v-on:click="xxx"
+                v-on:click="show_LONGLAT"
               />
             </div>
           </div>
@@ -117,6 +110,32 @@
         </div>
       </div>
     </div>
+    <!-- 修改经纬度 -->
+    <el-dialog
+      title="修改经纬度"
+      :visible.sync="flag_LONGLAT"
+      width="30%"
+      class="editForm_LONGLAT"
+      @close="close_LONGLAT"
+    >
+      <el-form
+        :model="basicInfo"
+        label-width="100px"
+        v-show="flag_LONGLAT"
+        class="editFormWrapper_LONGLAT"
+      >
+        <el-form-item label="经度" prop="longitude">
+          <el-input v-model.number="basicInfo.longitude"></el-input>
+        </el-form-item>
+        <el-form-item label="经度" prop="latitude">
+          <el-input v-model.number="basicInfo.latitude"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="close_LONGLAT">取 消</el-button>
+        <el-button type="primary" @click="submit_LONGLAT">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -131,7 +150,9 @@ export default {
       searchInfo: "",
       maplist: [],
       flag: false,
+      flag_LONGLAT: false,
       basicInfo: {
+        id: "",
         name: "",
         type: "",
         mac: "",
@@ -150,10 +171,21 @@ export default {
   created() {},
   methods: {
     restartDevice() {},
-    xxx() {},
-    deviceOffline() {},
+
     close() {
       this.flag = false;
+    },
+    show_LONGLAT() {
+      this.flag_LONGLAT = true;
+    },
+    close_LONGLAT() {
+      this.flag_LONGLAT = false;
+    },
+    submit_LONGLAT() {
+      let editUrl_LONGLAT = `/admin/api/charger/${this.basicInfo.id}/?token=${this.token}&longitude=${this.basicInfo.longitude}&latitude=${this.basicInfo.latitude}`;
+      this.$axios.put(editUrl_LONGLAT).then(res => {
+        this.flag_LONGLAT = false;
+      });
     },
     gaode() {
       this.$axios.get(`/map/gd/chargers/3,4,19`).then(res => {
@@ -199,7 +231,7 @@ export default {
         });
         //点击mark弹窗
         mass.on("click", e => {
-          let deviceInfoUrl = `/admin/api/charger/${e.data.id}/?token=${this.token}`;
+          let deviceInfoUrl = `/admin/api/charger/${e.data.id}/?token=${this.token}&attach=state,ports`;
           this.$axios.get(deviceInfoUrl).then(res => {
             console.log("res.data");
             console.log(res.data);
@@ -210,6 +242,7 @@ export default {
             }
             // 设备存在时，弹出框显示设备信息
             this.flag = true;
+            this.basicInfo.id = res.data.charger.id;
             this.basicInfo.name = res.data.charger.name;
             this.basicInfo.mac = res.data.charger.mac;
             this.basicInfo.type = res.data.charger.type;
@@ -219,9 +252,11 @@ export default {
             this.basicInfo.enabled = res.data.charger.enabled;
             this.basicInfo.longitude = res.data.charger.longitude;
             this.basicInfo.latitude = res.data.charger.latitude;
+            console.log("this.basicInfo.rssi");
+            console.log(this.basicInfo.rssi);
             res.data.charger.online
-              ? (this.basicInfo.online = "在线")
-              : (this.basicInfo.online = "离线");
+              ? (this.basicInfo.online = "设备在线")
+              : (this.basicInfo.online = "设备离线");
           });
         });
 
@@ -250,6 +285,25 @@ export default {
 </script>
 
 <style scoped="scoped">
+.editForm_LONGLAT {
+  position: absolute;
+  z-index: 9999;
+  /* width: 300px; */
+  /* width: 200px; */
+  /* left: calc(50% - 100px); */
+  /* top: calc(50% - 100px); */
+}
+.editFormWrapper_LONGLAT >>> .el-input__inner {
+  height: 30px;
+  border: none;
+  width: 80%;
+  border: 1px solid blue;
+  /* position: absolute; */
+  /* z-index: 9999; */
+  /* left: calc(50% - 100px); */
+  /* top: calc(50% - 100px); */
+}
+
 .immm {
   width: 32px;
   height: 22px;
@@ -1031,7 +1085,7 @@ export default {
 
 .input {
   width: 100%;
-  margin: 0px 30px 22px 31px;
+  margin: 0px 30px 30px 31px;
 }
 
 .spans img {
