@@ -116,7 +116,7 @@
         </div>
       </div>
       <div class="zong" v-show="select == 2">
-        <!-- <div class="chong_left test test-1">
+        <div class="chong_left test test-1">
           <div class="scrollbar">
             <el-scrollbar style="height: 100%">
               <div
@@ -126,9 +126,9 @@
                 class="quan"
                 :class="{ back: selectss == item.id }"
               >
-                <span>{{ item.id }}</span
-                ><span class="wen">{{ item.name }}</span
-                ><img src="../../assets/images/smallIntng.png" alt="" />
+                <span>{{ item.id }}</span>
+                <span class="wen">{{ item.name }}</span>
+                <img src="../../assets/images/smallIntng.png" alt="" />
               </div>
             </el-scrollbar>
           </div>
@@ -232,7 +232,7 @@
               </div>
             </div>
           </div>
-        </div> -->
+        </div>
       </div>
     </div>
     <!-- 修改经纬度 -->
@@ -272,9 +272,16 @@ export default {
   },
   data() {
     return {
+      leftList: [
+        { name: "设备故障", id: 1 },
+        { name: "设备空闲", id: 2 },
+        { name: "正在充电", id: 3 },
+        { name: "充电完成", id: 4 }
+      ],
+      selectss: 2,
       msg: [
-        { name: "基本信息", id: "1" },
-        { name: "充电状态", id: "2" }
+        { name: "基本信息", id: 1 },
+        { name: "充电状态", id: 2 }
       ],
       select: 1,
       searchInfo: "",
@@ -292,7 +299,8 @@ export default {
         enabled: "",
         online: "",
         longitude: "",
-        latitude: ""
+        latitude: "",
+        ports: []
       },
       select: 1,
       token: JSON.parse(localStorage.getItem("token"))
@@ -301,8 +309,24 @@ export default {
   created() {},
   methods: {
     restartDevice() {},
+    change(id) {
+      this.selectss = id;
+    },
     dian(id) {
+      console.log("this.basicInfo.ports");
+      console.log(this.basicInfo.ports);
       this.select = id;
+      if (this.basicInfo.ports[0].error) {
+        console.log(this.basicInfo.ports[0].error);
+        this.selectss = 1;
+      } else {
+        console.log(typeof this.basicInfo.ports[0].state);
+        if (this.basicInfo.ports[0].state === 0) {
+          console.log(this.basicInfo.ports[0].state);
+          this.selectss = 2;
+        }
+        this.selectss = 3;
+      }
     },
     close() {
       this.flag = false;
@@ -384,8 +408,7 @@ export default {
             this.basicInfo.enabled = res.data.charger.enabled;
             this.basicInfo.longitude = res.data.charger.longitude;
             this.basicInfo.latitude = res.data.charger.latitude;
-            console.log("this.basicInfo.rssi");
-            console.log(this.basicInfo.rssi);
+            this.basicInfo.ports = res.data.charger.ports;
             res.data.charger.online
               ? (this.basicInfo.online = "设备在线")
               : (this.basicInfo.online = "设备离线");
