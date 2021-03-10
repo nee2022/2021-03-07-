@@ -19,7 +19,13 @@
     <div class="quans" v-show="flag"></div>
     <div class="qq" v-show="flag">
       <div class="spans">
-        <span>基本信息</span>
+        <span
+          @click="dian(item.id)"
+          v-for="(item, i) in msg"
+          :key="i"
+          :class="{ blueWord: select == item.id }"
+          >{{ item.name }}</span
+        >
         <div class="zzz">
           <!-- <img src="../../assets/images/electricity.png" alt="" /> -->
           <!-- <img src="../../assets/images/signal.png" alt="" /> -->
@@ -109,6 +115,125 @@
           <div id="containes"></div>
         </div>
       </div>
+      <div class="zong" v-show="select == 2">
+        <!-- <div class="chong_left test test-1">
+          <div class="scrollbar">
+            <el-scrollbar style="height: 100%">
+              <div
+                @click="change(item.id)"
+                v-for="(item, id) in leftList"
+                :key="id"
+                class="quan"
+                :class="{ back: selectss == item.id }"
+              >
+                <span>{{ item.id }}</span
+                ><span class="wen">{{ item.name }}</span
+                ><img src="../../assets/images/smallIntng.png" alt="" />
+              </div>
+            </el-scrollbar>
+          </div>
+        </div>
+        <div class="zhuang" v-show="selectss == 3">
+          <div class="chong_zhong">
+            <div class="dian">
+              <div class="dian_d">
+                <div>
+                  <img src="../../assets/images/Inthecharging.png" alt="" />
+                </div>
+                <div class="wenzi">
+                  <span>充电中...</span>
+                  <div class="yuan">
+                    <span style="color: red">￥100</span> <span>100KW/H</span>
+                  </div>
+                  <div class="jiner">
+                    <span>所属金额</span><span>已充电量</span>
+                  </div>
+                </div>
+              </div>
+              <div class="yaa">
+                <div class="ya">
+                  <div>380V</div>
+                  <div>电压</div>
+                </div>
+                <div class="ya">
+                  <div>32A</div>
+                  <div>电流</div>
+                </div>
+                <div class="ya">
+                  <div>380V</div>
+                  <div>功率</div>
+                </div>
+              </div>
+              <div class="buttt">
+                <el-button icon="el-icon-error" class="buts" type="primary"
+                  >停止充电</el-button
+                >
+              </div>
+            </div>
+          </div>
+          <div class="chong_right">
+            <div class="dingdan">
+              <div class="ding">订单号：<span>3423454</span></div>
+              <div class="xia">
+                <div class="xia_i">
+                  <div>开始时间：</div>
+                  <span
+                    >2020-11-11<span style="margin-left: 12px">13：42</span>
+                  </span>
+                </div>
+                <div class="xia_i">
+                  <div>支付账号：</div>
+                  <span>43085093404</span>
+                </div>
+                <div class="xia_i">
+                  <div>卡号</div>
+                  <span>230948230</span>
+                </div>
+                <div class="xia_i">
+                  <div>充电方式</div>
+                  <span>自动充满</span>
+                </div>
+                <div class="xia_i">
+                  <div>充电金额</div>
+                  <span style="color: red">￥100.00</span>
+                </div>
+              </div>
+              <img class="imgss" src="../../assets/images/picture.png" alt="" />
+            </div>
+          </div>
+        </div>
+        <div class="zhuang zhu" v-show="selectss == 1">
+          <div class="cuowu">
+            <img src="../../assets/images/Thefault.png" alt="" />
+            <div>设备故障，请及时处理！</div>
+            <div>错误代码：678</div>
+          </div>
+        </div>
+        <div class="zhuang zhu" v-show="selectss == 2">
+          <div class="cuowu2">
+            <img src="../../assets/images/free.png" alt="" />
+            <div>设备空闲中...</div>
+            <div class="bu2">
+              <div class="bu">
+                <img src="../../assets/images/Startcharging.png" alt="" />
+                <span>启动充电</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="zhuang zhu" v-show="selectss == 4">
+          <div class="cuowu2">
+            <img src="../../assets/images/completed.png" alt="" />
+            <div>充电已完成，请及时移除...</div>
+            <div class="bu2">
+              <div class="bu">
+                <img src="../../assets/images/Startcharging.png" alt="" />
+                <span>启动充电</span>
+              </div>
+            </div>
+          </div>
+        </div> -->
+      </div>
     </div>
     <!-- 修改经纬度 -->
     <el-dialog
@@ -147,6 +272,11 @@ export default {
   },
   data() {
     return {
+      msg: [
+        { name: "基本信息", id: "1" },
+        { name: "充电状态", id: "2" }
+      ],
+      select: 1,
       searchInfo: "",
       maplist: [],
       flag: false,
@@ -171,7 +301,9 @@ export default {
   created() {},
   methods: {
     restartDevice() {},
-
+    dian(id) {
+      this.select = id;
+    },
     close() {
       this.flag = false;
     },
