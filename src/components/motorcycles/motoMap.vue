@@ -230,8 +230,8 @@
               <el-form-item label="端口号">
                 <el-select v-model="startPortForm.gun" placeholder="选择端口">
                   <el-option
-                    v-for="item in port_free"
-                    :key="item.port"
+                    v-for="(item, i) in port_free"
+                    :key="i"
                     :label="item.label"
                     :value="item.port"
                   >
@@ -245,8 +245,8 @@
                   disabled
                 >
                   <el-option
-                    v-for="item in start_type"
-                    :key="item.type"
+                    v-for="(item, i) in start_type"
+                    :key="i"
                     :label="item.label"
                     :value="item.type"
                   >
