@@ -211,14 +211,57 @@
         </div>
         <div class="zhuang zhu" v-show="selectss == 2">
           <div class="cuowu2">
-            <img src="../../assets/images/free.png" alt="" />
+            <!-- <img src="../../assets/images/free.png" alt="" />
             <div>设备空闲中...</div>
             <div class="bu2">
               <div class="bu">
                 <img src="../../assets/images/Startcharging.png" alt="" />
                 <span>启动充电</span>
               </div>
-            </div>
+            </div> -->
+            <el-form
+              label-position="right"
+              label-width="80px"
+              :model="startPortForm"
+            >
+              <el-form-item label="设备名">
+                <el-input v-model="startPortForm.name"></el-input>
+              </el-form-item>
+              <el-form-item label="端口号">
+                <el-select v-model="startPortForm.gun" placeholder="选择端口">
+                  <el-option
+                    v-for="item in port_free"
+                    :key="item.port"
+                    :label="item.label"
+                    :value="item.port"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="启动方式">
+                <el-select
+                  v-model="startPortForm.type"
+                  placeholder="时间"
+                  disabled
+                >
+                  <el-option
+                    v-for="item in start_type"
+                    :key="item.type"
+                    :label="item.label"
+                    :value="item.type"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="时间/分">
+                <el-input v-model="startPortForm.duration"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="onSubmit_free"
+                  >开始充电</el-button
+                >
+              </el-form-item>
+            </el-form>
           </div>
         </div>
         <div class="zhuang zhu" v-show="selectss == 4">
@@ -272,12 +315,36 @@ export default {
   },
   data() {
     return {
+      start_type: [
+        {
+          type: 0,
+          label: "自动充满"
+        },
+        {
+          type: 1,
+          label: "按金额"
+        },
+        {
+          type: 2,
+          label: "按电量"
+        },
+        {
+          type: 3,
+          label: "按时间"
+        }
+      ],
+      startPortForm: {
+        name: "",
+        gun: "",
+        type: 3,
+        duration: ""
+      },
       port_free: [],
       port_work: [],
+
       leftList: [
         { name: "设备故障", id: 1 },
-        { name: "设备空闲", id: 2 },
-        { name: "正在充电", id: 3 }
+        { name: "设备空闲", id: 2 }
       ],
       selectss: 2,
       msg: [
@@ -309,20 +376,43 @@ export default {
   },
   created() {},
   methods: {
+    onSubmit_free() {
+      let url_startPort = `admin/api/charger/${this.basicInfo.id}/${this.startPortForm.gun}/session/?token=${this.token}&type=3&duration=${this.startPortForm.duration}`;
+      console.log("url_startPort");
+      console.log(url_startPort);
+      this.$axios.post(url_startPort).then(res => {
+        console.log(res);
+      });
+    },
+    formatterType: function(row, column, cellValue) {
+      var ret = ""; //你想在页面展示的值
+      if (cellValue === 1) {
+        ret = "金额"; //根据自己的需求设定
+      } else if (cellValue === 2) {
+        ret = "电能";
+      } else if (cellValue === 3) {
+        ret = "时间";
+      } else {
+        ret = "未知";
+      }
+      return ret;
+    },
     restartDevice() {},
     change(id) {
       this.selectss = id;
     },
     generateFreeAndWorkPort(id) {
       if (id === 2) {
-        console.log("id");
-        console.log(id);
+        // console.log("id");
+        // console.log(id);
         if (!this.basicInfo.ports) {
           return;
         }
         for (let i = 0; i < this.basicInfo.ports.length; i++) {
-          console.log("this.basicInfo.ports[i]");
-          console.log(this.basicInfo.ports[i]);
+          // console.log("this.basicInfo.ports[i]");
+          // console.log(this.basicInfo.ports[i]);
+          this.basicInfo.ports[i].label = `端口${this.basicInfo.ports[i].port}`;
+
           if (this.basicInfo.ports[i].state === 0) {
             this.port_free.push(this.basicInfo.ports[i]);
             return;
@@ -334,17 +424,10 @@ export default {
     dian(id) {
       this.select = id;
       this.generateFreeAndWorkPort(id);
-      if (this.basicInfo.ports[0].error) {
-        console.log(this.basicInfo.ports[0].error);
-        this.selectss = 1;
-      } else {
-        console.log(typeof this.basicInfo.ports[0].state);
-        if (this.basicInfo.ports[0].state === 0) {
-          console.log(this.basicInfo.ports[0].state);
-          this.selectss = 2;
-        }
-        this.selectss = 3;
-      }
+      console.log("this.port_free");
+      console.log(this.port_free);
+      this.selectss = 2;
+      this.startPortForm.name = this.basicInfo.name;
     },
     close() {
       this.flag = false;
@@ -353,6 +436,7 @@ export default {
       this.flag_LONGLAT = true;
     },
     close_LONGLAT() {
+      3;
       this.flag_LONGLAT = false;
     },
     submit_LONGLAT() {
