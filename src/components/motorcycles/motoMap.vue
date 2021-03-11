@@ -126,7 +126,7 @@
                 class="quan"
                 :class="{ back: selectss == item.id }"
               >
-                <span>{{ item.id }}</span>
+                <!-- <span>{{ item.id }}</span> -->
                 <span class="wen">{{ item.name }}</span>
                 <img src="../../assets/images/smallIntng.png" alt="" />
               </div>
@@ -134,7 +134,51 @@
           </div>
         </div>
         <div class="zhuang" v-show="selectss == 3">
-          <div class="chong_zhong">
+          <div class="zhuangWrapper">
+            <el-form
+              label-position="right"
+              label-width="80px"
+              :model="startPortForm"
+            >
+              <el-form-item label="设备名">
+                <el-input v-model="stopPortForm.name"></el-input>
+              </el-form-item>
+              <el-form-item label="端口号">
+                <el-select v-model="stopPortForm.gun" placeholder="选择端口">
+                  <el-option
+                    v-for="(item, i) in port_work"
+                    :key="i"
+                    :label="item.label"
+                    :value="item.port"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label="启动方式">
+                <el-select
+                  v-model="stopPortForm.type"
+                  placeholder="时间"
+                  disabled
+                >
+                  <el-option
+                    v-for="(item, i) in start_type"
+                    :key="i"
+                    :label="item.label"
+                    :value="item.type"
+                  >
+                  </el-option>
+                </el-select>
+              </el-form-item>
+
+              <el-form-item>
+                <el-button type="primary" @click="onSubmit_work"
+                  >停止充电</el-button
+                >
+              </el-form-item>
+            </el-form>
+          </div>
+
+          <!-- <div class="chong_zhong">
             <div class="dian">
               <div class="dian_d">
                 <div>
@@ -200,7 +244,7 @@
               </div>
               <img class="imgss" src="../../assets/images/picture.png" alt="" />
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="zhuang zhu" v-show="selectss == 1">
           <div class="cuowu">
@@ -210,7 +254,7 @@
           </div>
         </div>
         <div class="zhuang zhu" v-show="selectss == 2">
-          <div class="cuowu2">
+          <div class="zhuangWrapper">
             <!-- <img src="../../assets/images/free.png" alt="" />
             <div>设备空闲中...</div>
             <div class="bu2">
@@ -254,7 +298,10 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="时间/分">
-                <el-input v-model="startPortForm.duration"></el-input>
+                <el-input
+                  v-model="startPortForm.duration"
+                  placeholder="请输入充电时间"
+                ></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="onSubmit_free"
@@ -339,11 +386,16 @@ export default {
         type: 3,
         duration: ""
       },
+      stopPortForm: {
+        name: "",
+        gun: "",
+        type: 3
+      },
       port_free: [],
       port_work: [],
 
       leftList: [
-        { name: "设备故障", id: 1 },
+        // { name: "设备故障", id: 1 },
         { name: "设备空闲", id: 2 },
         { name: "正在充电", id: 3 }
       ],
@@ -379,12 +431,25 @@ export default {
   methods: {
     onSubmit_free() {
       let url_startPort = `admin/api/charger/${this.basicInfo.id}/${this.startPortForm.gun}/session/?token=${this.token}&type=3&duration=${this.startPortForm.duration}`;
-      console.log("url_startPort");
-      console.log(url_startPort);
       this.$axios.post(url_startPort).then(res => {
-        let deviceInfoUrl = `/admin/api/charger/${e.data.id}/?token=${this.token}&attach=state,ports`;
+        let deviceInfoUrl = `/admin/api/charger/${this.basicInfo.id}/?token=${this.token}&attach=state,ports`;
         this.$axios.get(deviceInfoUrl).then(res => {
           this.basicInfo.ports = res.data.charger.ports;
+          this.generateFreeAndWorkPort(2);
+        });
+      });
+    },
+    onSubmit_work() {
+      let url_startPort = `admin/api/charger/${this.basicInfo.id}/${this.stopPortForm.gun}/session/?token=${this.token}`;
+      if (!this.stopPortForm.gun) {
+        alert("所操作的端口不存在");
+        return;
+      }
+      this.$axios.delete(url_startPort).then(res => {
+        let deviceInfoUrl = `/admin/api/charger/${this.basicInfo.id}/?token=${this.token}&attach=state,ports`;
+        this.$axios.get(deviceInfoUrl).then(res => {
+          this.basicInfo.ports = res.data.charger.ports;
+          this.generateFreeAndWorkPort(2);
         });
       });
     },
@@ -393,33 +458,35 @@ export default {
       this.selectss = id;
     },
     generateFreeAndWorkPort(id) {
+      this.port_free = [];
+      this.port_work = [];
       if (id === 2) {
-        // console.log("id");
-        // console.log(id);
         if (!this.basicInfo.ports) {
           return;
         }
         for (let i = 0; i < this.basicInfo.ports.length; i++) {
-          // console.log("this.basicInfo.ports[i]");
-          // console.log(this.basicInfo.ports[i]);
           this.basicInfo.ports[i].label = `端口${this.basicInfo.ports[i].port}`;
 
           if (this.basicInfo.ports[i].state === 0) {
             this.port_free.push(this.basicInfo.ports[i]);
+            console.log("this.port_free");
+            console.log(this.port_free);
             return;
           }
           this.port_work.push(this.basicInfo.ports[i]);
+          console.log("this.port_work");
+          console.log(this.port_work);
         }
       }
     },
     dian(id) {
       this.select = id;
       this.generateFreeAndWorkPort(id);
-      console.log("this.port_free");
-      console.log(this.port_free);
       this.selectss = 2;
       this.startPortForm.name = this.basicInfo.name;
+      this.stopPortForm.name = this.basicInfo.name;
     },
+
     close() {
       this.flag = false;
     },
@@ -439,8 +506,6 @@ export default {
     gaode() {
       this.$axios.get(`/map/gd/chargers/3,4,19`).then(res => {
         this.maplist = res.data.chargers;
-        // console.log("this.maplist");
-        // console.log(this.maplist);
         //图片样式
         //图片样式
         var style = [];
@@ -482,8 +547,6 @@ export default {
         mass.on("click", e => {
           let deviceInfoUrl = `/admin/api/charger/${e.data.id}/?token=${this.token}&attach=state,ports`;
           this.$axios.get(deviceInfoUrl).then(res => {
-            console.log("res.data");
-            console.log(res.data);
             // 返回数据为“设备不存在”的判断
             if (res.data.error === 1793) {
               alert("设备不存在");
@@ -533,6 +596,13 @@ export default {
 </script>
 
 <style scoped="scoped">
+.zhuangWrapper {
+  /* border: 1px solid red; */
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .editForm_LONGLAT {
   position: absolute;
   z-index: 9999;
