@@ -401,8 +401,8 @@ export default {
       ],
       selectss: 2,
       msg: [
-        { name: "基本信息", id: 1 },
-        { name: "充电状态", id: 2 }
+        { name: "基本信息", id: 1 }
+        // { name: "充电状态", id: 2 }
       ],
       select: 1,
       searchInfo: "",
