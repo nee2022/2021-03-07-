@@ -344,7 +344,8 @@ export default {
 
       leftList: [
         { name: "设备故障", id: 1 },
-        { name: "设备空闲", id: 2 }
+        { name: "设备空闲", id: 2 },
+        { name: "正在充电", id: 3 }
       ],
       selectss: 2,
       msg: [
@@ -381,21 +382,11 @@ export default {
       console.log("url_startPort");
       console.log(url_startPort);
       this.$axios.post(url_startPort).then(res => {
-        console.log(res);
+        let deviceInfoUrl = `/admin/api/charger/${e.data.id}/?token=${this.token}&attach=state,ports`;
+        this.$axios.get(deviceInfoUrl).then(res => {
+          this.basicInfo.ports = res.data.charger.ports;
+        });
       });
-    },
-    formatterType: function(row, column, cellValue) {
-      var ret = ""; //你想在页面展示的值
-      if (cellValue === 1) {
-        ret = "金额"; //根据自己的需求设定
-      } else if (cellValue === 2) {
-        ret = "电能";
-      } else if (cellValue === 3) {
-        ret = "时间";
-      } else {
-        ret = "未知";
-      }
-      return ret;
     },
     restartDevice() {},
     change(id) {
