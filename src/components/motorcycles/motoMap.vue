@@ -434,16 +434,18 @@ export default {
       this.$axios.post(url_startPort).then(
         res => {
           let deviceInfoUrl = `/admin/api/charger/${this.basicInfo.id}/?token=${this.token}&attach=state,ports`;
+          this.startPortForm.gun = "";
+          this.stopPortForm.gun = "";
           setTimeout(() => {
             this.$axios.get(deviceInfoUrl).then(res => {
+              console.log("res.data.chargerStart");
+              console.log(res.data.charger);
               this.basicInfo.ports = res.data.charger.ports;
-              this.startPortForm.gun = "";
-              this.stopPortForm.gun = "";
+              console.log(this.basicInfo.ports);
               this.generateFreeAndWorkPort(2);
-
               this.select = 1;
             });
-          }, 888);
+          }, 3000);
         },
         () => {
           alert(启动充电失败);
@@ -452,20 +454,21 @@ export default {
     },
     onSubmit_work() {
       let url_stopPort = `admin/api/charger/${this.basicInfo.id}/${this.stopPortForm.gun}/session/?token=${this.token}`;
-      console.log("url_stopPort");
-      console.log(url_stopPort);
       this.$axios.delete(url_stopPort).then(
         res => {
           let deviceInfoUrl = `/admin/api/charger/${this.basicInfo.id}/?token=${this.token}&attach=state,ports`;
+          this.startPortForm.gun = "";
+          this.stopPortForm.gun = "";
           setTimeout(() => {
             this.$axios.get(deviceInfoUrl).then(res => {
+              console.log("res.data.chargerStop");
+              console.log(res.data.charger);
               this.basicInfo.ports = res.data.charger.ports;
-              this.startPortForm.gun = "";
-              this.stopPortForm.gun = "";
+              console.log(this.basicInfo.ports);
               this.generateFreeAndWorkPort(2);
               this.select = 1;
             });
-          }, 888);
+          }, 3000);
         },
         () => {
           alert(停止充电失败);
@@ -480,24 +483,17 @@ export default {
       this.port_free = [];
       this.port_work = [];
       if (id === 2) {
-        console.log(!this.basicInfo.ports);
         if (!this.basicInfo.ports) {
           return;
         }
         for (let i = 0; i < this.basicInfo.ports.length; i++) {
           this.basicInfo.ports[i].label = `端口${this.basicInfo.ports[i].port}`;
 
-          console.log(typeof this.basicInfo.ports[i].state);
-          console.log(this.basicInfo.ports[i].state);
           if (this.basicInfo.ports[i].state === 0) {
             this.port_free.push(this.basicInfo.ports[i]);
-            console.log("this.port_free");
-            console.log(this.port_free);
             continue;
           }
           this.port_work.push(this.basicInfo.ports[i]);
-          console.log("this.port_work");
-          console.log(this.port_work);
         }
       }
     },
@@ -591,8 +587,6 @@ export default {
               ? (this.basicInfo.online = "设备在线")
               : (this.basicInfo.online = "设备离线");
           });
-          console.log("this.basicInfo");
-          console.log(this.basicInfo);
         });
 
         mass.setMap(_this.map);
